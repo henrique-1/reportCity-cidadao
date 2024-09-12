@@ -11,7 +11,6 @@ jobs:
   build:
     name: Build & Release
     runs-on: macos-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -36,6 +35,8 @@ jobs:
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
+      - name: Analyze App
+        run: flutter analyze
       - name: Build APK
         run: flutter build apk
       - name: Build appBundle
