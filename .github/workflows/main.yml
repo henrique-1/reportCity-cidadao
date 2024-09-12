@@ -24,6 +24,8 @@ jobs:
         with:
           flutter-version: "3.24.0"
           channel: "stable"
+      - name: Clean App Dependencies
+        run: flutter clean
       - name: Install Dependencies
         run: flutter pub get
       - name: Decode Keystore
