@@ -163,7 +163,7 @@ class _LogonState extends State<Logon> {
                     ),
                   ),
                   Expanded(
-                    flex: 12,
+                    flex: 14,
                     child: Form(
                       key: _logonFormKey,
                       autovalidateMode: AutovalidateMode.onUnfocus,
@@ -263,52 +263,6 @@ class _LogonState extends State<Logon> {
                             height: 8.h,
                           ),
                           TextFormFieldWidget(
-                            textFormFieldController: _passwordController,
-                            isObscure: true,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.done,
-                            formKey: _logonFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira sua senha!";
-                              }
-
-                              return null;
-                            },
-                            label: "Senha",
-                            maxlines: 1,
-                            textInputType: TextInputType.visiblePassword,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            textFormFieldController:
-                                _passwordConfirmationController,
-                            isObscure: true,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.next,
-                            formKey: _logonFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira a confirmação da sua senha!";
-                              }
-
-                              if (_passwordController.text !=
-                                  _passwordConfirmationController.text) {
-                                return "As senhas devem ser idênticas";
-                              }
-
-                              return null;
-                            },
-                            label: "Confirmação de senha",
-                            maxlines: 1,
-                            textInputType: TextInputType.visiblePassword,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
                             textFormFieldController: _zipController,
                             formKey: _logonFormKey,
                             callback: (value) {
@@ -333,6 +287,166 @@ class _LogonState extends State<Logon> {
 
                               getZipCodeInfo(normalizedZipCode);
                             },
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: screenSize.width * 0.65,
+                                child: TextFormFieldWidget(
+                                  textFormFieldController: _streetController,
+                                  formKey: _logonFormKey,
+                                  callback: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Insira a rua!";
+                                    }
+                                    return null;
+                                  },
+                                  label: "Rua",
+                                  maxlines: 1,
+                                  textInputType: TextInputType.streetAddress,
+                                  isObscure: false,
+                                  textInputAction: TextInputAction.next,
+                                ),
+                              ),
+                              SizedBox(
+                                width: screenSize.width * 0.3,
+                                child: TextFormFieldWidget(
+                                  textFormFieldController:
+                                      _houseNumberController,
+                                  formKey: _logonFormKey,
+                                  callback: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Insira o número!";
+                                    }
+                                    return null;
+                                  },
+                                  label: "Numero",
+                                  maxlines: 1,
+                                  textInputType: TextInputType.streetAddress,
+                                  isObscure: false,
+                                  textInputAction: TextInputAction.next,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          TextFormFieldWidget(
+                            textFormFieldController: _complementController,
+                            formKey: _logonFormKey,
+                            callback: (value) {
+                              return null;
+                            },
+                            label: "Complemento",
+                            maxlines: 1,
+                            textInputType: TextInputType.streetAddress,
+                            isObscure: false,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          TextFormFieldWidget(
+                            textFormFieldController: _neighborhoodController,
+                            formKey: _logonFormKey,
+                            callback: (value) {
+                              if (value.isEmpty) {
+                                return "Insira o bairro!";
+                              }
+                              return null;
+                            },
+                            label: "Bairro",
+                            maxlines: 1,
+                            textInputType: TextInputType.streetAddress,
+                            isObscure: false,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          TextFormFieldWidget(
+                            textFormFieldController: _cityController,
+                            formKey: _logonFormKey,
+                            callback: (value) {
+                              if (value.isEmpty) {
+                                return "Insira a cidade!";
+                              }
+                              return null;
+                            },
+                            label: "Cidade",
+                            maxlines: 1,
+                            textInputType: TextInputType.streetAddress,
+                            isObscure: false,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          TextFormFieldWidget(
+                            textFormFieldController: _stateController,
+                            formKey: _logonFormKey,
+                            callback: (value) {
+                              if (value.isEmpty) {
+                                return "Insira o estado!";
+                              }
+                              return null;
+                            },
+                            label: "Estado",
+                            maxlines: 1,
+                            textInputType: TextInputType.streetAddress,
+                            isObscure: false,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          TextFormFieldWidget(
+                            textFormFieldController: _passwordController,
+                            isObscure: true,
+                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                            textInputAction: TextInputAction.next,
+                            formKey: _logonFormKey,
+                            callback: (value) {
+                              if (value!.isEmpty) {
+                                return "Insira sua senha!";
+                              }
+
+                              return null;
+                            },
+                            label: "Senha",
+                            maxlines: 1,
+                            textInputType: TextInputType.visiblePassword,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          TextFormFieldWidget(
+                            textFormFieldController:
+                                _passwordConfirmationController,
+                            isObscure: true,
+                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                            textInputAction: TextInputAction.done,
+                            formKey: _logonFormKey,
+                            callback: (value) {
+                              if (value!.isEmpty) {
+                                return "Insira a confirmação da sua senha!";
+                              }
+
+                              if (_passwordController.text !=
+                                  _passwordConfirmationController.text) {
+                                return "As senhas devem ser idênticas";
+                              }
+
+                              return null;
+                            },
+                            label: "Confirmação de senha",
+                            maxlines: 1,
+                            textInputType: TextInputType.visiblePassword,
                           ),
                         ],
                       ),

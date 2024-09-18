@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                 flex: 3,
                 child: Form(
                   key: _loginFormKey,
-                  autovalidateMode: AutovalidateMode.onUnfocus,
+                  autovalidateMode: AutovalidateMode.disabled,
                   child: Flex(
                     direction: Axis.vertical,
                     children: [
@@ -183,7 +183,7 @@ class _LoginState extends State<Login> {
                 ),
               ),
               Expanded(
-                flex: 3,
+                flex: 2,
                 child: Flex(
                   direction: Axis.vertical,
                   children: [
@@ -235,11 +235,6 @@ class _LoginState extends State<Login> {
                       label: "Criar uma conta",
                     )
                   ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
               ),
             ],
