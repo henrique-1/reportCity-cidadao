@@ -1,4 +1,5 @@
 import 'package:cidadao/views/login.dart';
+import 'package:cidadao/views/logon.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -7,6 +8,10 @@ class RouteGenerator {
       case "/":
         return MaterialPageRoute(
           builder: (_) => const Login(),
+        );
+      case "/logon":
+        return MaterialPageRoute(
+          builder: (_) => const Logon(),
         );
       default:
         return _erroRota();
