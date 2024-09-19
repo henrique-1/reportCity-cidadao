@@ -46,14 +46,11 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      _showPassword = widget.isObscure;
-    });
-
     return TextFormField(
       // scrollPadding: EdgeInsets.symmetric(
       //   vertical: scrollPaddingHeight,
       // ),
+      autovalidateMode: AutovalidateMode.onUnfocus,
       inputFormatters: widget.textInputFormatter,
       controller: widget.textFormFieldController,
       maxLines: widget.maxlines,

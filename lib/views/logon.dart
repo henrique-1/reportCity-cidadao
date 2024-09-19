@@ -56,17 +56,37 @@ class _LogonState extends State<Logon> {
   }
 
   Future<void> getZipCodeInfo(String normalizedZipCode) async {
-    Response<dynamic> response = await Dio().get(
-      "https://viacep.com.br/ws/$normalizedZipCode/json/",
-      options: Options(
-        responseType: ResponseType.json,
-      ),
-    );
+    try {
+      Response<dynamic> response = await Dio().get(
+        "https://viacep.com.br/ws/$normalizedZipCode/json/",
+        options: Options(
+          responseType: ResponseType.json,
+        ),
+      );
 
-    _streetController.text = response.data['logradouro'];
-    _neighborhoodController.text = response.data['bairro'];
-    _cityController.text = response.data['localidade'];
-    _stateController.text = response.data['uf'];
+      if (response.data['logradouro'] == null) {
+        throw DioException.badResponse(
+          statusCode: response.statusCode!.toInt(),
+          requestOptions: response.requestOptions,
+          response: response,
+        );
+      } else {
+        _streetController.text = response.data['logradouro'];
+        _neighborhoodController.text = response.data['bairro'];
+        _cityController.text = response.data['localidade'];
+        _stateController.text = response.data['uf'];
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.requestOptions);
+        print(e.message);
+      }
+    }
   }
 
   /// Cadastro:
@@ -102,7 +122,7 @@ class _LogonState extends State<Logon> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: SizedBox(
@@ -152,7 +172,7 @@ class _LogonState extends State<Logon> {
                     ),
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: ImageAsset(
                       asset: 'assets/reportCityLogo.png',
                       width_: screenSize.height / 5,
@@ -163,10 +183,9 @@ class _LogonState extends State<Logon> {
                     ),
                   ),
                   Expanded(
-                    flex: 14,
+                    flex: 19,
                     child: Form(
                       key: _logonFormKey,
-                      autovalidateMode: AutovalidateMode.onUnfocus,
                       child: Flex(
                         direction: Axis.vertical,
                         children: [
@@ -262,6 +281,41 @@ class _LogonState extends State<Logon> {
                           SizedBox(
                             height: 8.h,
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Expanded(
+                                flex: 3,
+                                child: Divider(
+                                  color: Color(0xFF9e9d99),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "Endereço",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12.sp,
+                                    color:
+                                        const Color.fromARGB(255, 77, 71, 50),
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.67.sp,
+                                  ),
+                                ),
+                              ),
+                              const Expanded(
+                                flex: 3,
+                                child: Divider(
+                                  color: Color(0xFF9e9d99),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
                           TextFormFieldWidget(
                             textFormFieldController: _zipController,
                             formKey: _logonFormKey,
@@ -281,11 +335,14 @@ class _LogonState extends State<Logon> {
                               CepInputFormatter(),
                             ],
                             onEditComplete: () {
-                              final String normalizedZipCode =
-                                  UtilBrasilFields.removeCaracteres(
-                                      _zipController.text);
+                              if (_zipController.text.isNotEmpty) {
+                                final String normalizedZipCode =
+                                    UtilBrasilFields.removeCaracteres(
+                                        _zipController.text);
 
-                              getZipCodeInfo(normalizedZipCode);
+                                getZipCodeInfo(normalizedZipCode);
+                                FocusScope.of(context).nextFocus();
+                              } else {}
                             },
                           ),
                           SizedBox(
@@ -405,6 +462,41 @@ class _LogonState extends State<Logon> {
                           SizedBox(
                             height: 8.h,
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Expanded(
+                                flex: 3,
+                                child: Divider(
+                                  color: Color(0xFF9e9d99),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  "Senha",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12.sp,
+                                    color:
+                                        const Color.fromARGB(255, 77, 71, 50),
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.67.sp,
+                                  ),
+                                ),
+                              ),
+                              const Expanded(
+                                flex: 3,
+                                child: Divider(
+                                  color: Color(0xFF9e9d99),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
                           TextFormFieldWidget(
                             textFormFieldController: _passwordController,
                             isObscure: true,
@@ -453,23 +545,28 @@ class _LogonState extends State<Logon> {
                     ),
                   ),
                   SizedBox(
-                    height: 8.h,
+                    height: 16.h,
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Flex(
-                      direction: Axis.vertical,
-                      children: [
-                        ElevatedButtonWidget(
-                          callback: () {
-                            Navigator.popAndPushNamed(context, "/home");
-                          },
-                          width_: screenSize.width,
-                          height_: 50.h,
-                          label: "Cadastrar",
-                        ),
-                      ],
-                    ),
+                  ElevatedButtonWidget(
+                    callback: () {
+                      if (_logonFormKey.currentState!.validate()) {
+                        Navigator.popAndPushNamed(context, "/home");
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Insira os seus dados corretamente!',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    width_: screenSize.width,
+                    height_: 50.h,
+                    label: "Cadastrar",
+                  ),
+                  SizedBox(
+                    height: 8.h,
                   ),
                   Padding(
                     padding: EdgeInsets.only(
