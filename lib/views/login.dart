@@ -110,7 +110,6 @@ class _LoginState extends State<Login> {
                 flex: 3,
                 child: Form(
                   key: _loginFormKey,
-                  autovalidateMode: AutovalidateMode.disabled,
                   child: Flex(
                     direction: Axis.vertical,
                     children: [
@@ -189,7 +188,17 @@ class _LoginState extends State<Login> {
                   children: [
                     ElevatedButtonWidget(
                       callback: () {
-                        Navigator.popAndPushNamed(context, "/home");
+                        if (_loginFormKey.currentState!.validate()) {
+                          Navigator.popAndPushNamed(context, "/home");
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Insira os seus dados corretamente!',
+                              ),
+                            ),
+                          );
+                        }
                       },
                       width_: screenSize.width,
                       height_: 50.h,

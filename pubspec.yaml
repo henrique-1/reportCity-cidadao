@@ -38,13 +38,11 @@ flutter:
     - assets/
 
 flutter_launcher_icons:
-  image_path_android: "assets/icons/android/icon_android.png"
-  image_path_ios: "assets/icons/ios/icon_ios.png"
-  android: true
+  android: "launcher_icons"
   ios: true
-  min_sdk_android: 21
-  remove_alpha_ios: true
-  background_color_ios: "#FFFFFF"
+  image_path: "assets/reportCityLogo_upscayl_2x_ultrasharp.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  generate: false
 
 flutter_native_splash:
   # This package generates native code to customize Flutter's default white native splash screen
@@ -70,7 +68,7 @@ flutter_native_splash:
 
   # The image parameter allows you to specify an image used in the splash screen.  It must be a
   # png file and should be sized for 4x pixel density.
-  image: assets/reportCityLogo.png
+  image: assets/reportCityLogo_circular.png
 
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. It is supported for Android, iOS and the Web.  For Android 12,
@@ -105,7 +103,7 @@ flutter_native_splash:
     # 640 pixels in diameter.
     # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
     # 768 pixels in diameter.
-    image: assets/reportCityLogo.png
+    image: assets/reportCityLogo_circular.png
 
     # Splash screen background color.
     color: "#f6f6f6"
