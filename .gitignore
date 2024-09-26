@@ -41,4 +41,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/android/key.properties
+
+# Other O.S files
+/windows
+/web
+/macos
+/linux
