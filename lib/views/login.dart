@@ -20,8 +20,6 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
 
-  final bool _rememberLogin = false;
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -103,7 +101,7 @@ class _LoginState extends State<Login> {
                   height_: screenSize.height / 5,
                   imageAlignment: Alignment.center,
                   hasAntiAlias: true,
-                  imageFilterQuality: FilterQuality.medium,
+                  imageFilterQuality: FilterQuality.high,
                 ),
               ),
               Expanded(

@@ -10,13 +10,13 @@ class TextFormFieldWidget extends StatefulWidget {
   final String label;
   final int maxlines;
   final TextInputType textInputType;
-  bool isObscure;
+  final bool isObscure;
   //final double scrollPaddingHeight;
   final TextInputAction textInputAction;
   final List<TextInputFormatter>? textInputFormatter;
   final onEditComplete;
 
-  TextFormFieldWidget({
+  const TextFormFieldWidget({
     super.key,
     required this.textFormFieldController,
     required this.formKey,

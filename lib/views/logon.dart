@@ -179,7 +179,7 @@ class _LogonState extends State<Logon> {
                       height_: screenSize.height / 5,
                       imageAlignment: Alignment.center,
                       hasAntiAlias: true,
-                      imageFilterQuality: FilterQuality.medium,
+                      imageFilterQuality: FilterQuality.high,
                     ),
                   ),
                   Expanded(
