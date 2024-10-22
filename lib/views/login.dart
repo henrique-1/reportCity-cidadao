@@ -4,6 +4,7 @@ import 'package:cidadao/components/outlinedButton.dart';
 import 'package:cidadao/components/textButton.dart';
 import 'package:cidadao/components/textFormField.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
@@ -127,9 +128,14 @@ class _LoginState extends State<Login> {
                           }
                           return null;
                         },
+                        textInputFormatter: [
+                          LengthLimitingTextInputFormatter(255)
+                        ],
                         label: "E-mail",
-                        maxlines: 1,
+                        maxLines: 1,
                         textInputType: TextInputType.emailAddress,
+                        //maxLength: 255,
+                        maxLengthEnforced: MaxLengthEnforcement.enforced,
                       ),
                       SizedBox(
                         height: 8.h,
@@ -147,15 +153,21 @@ class _LoginState extends State<Login> {
 
                           return null;
                         },
+                        textInputFormatter: [
+                          LengthLimitingTextInputFormatter(60)
+                        ],
                         label: "Senha",
-                        maxlines: 1,
+
+                        maxLines: 1,
                         textInputType: TextInputType.visiblePassword,
+                        //maxLength: 60,
+                        maxLengthEnforced: MaxLengthEnforcement.enforced,
                       ),
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: TextButtonWidget(
                           callback: () {
-                            Navigator.pushNamed(context, "/recoverySMS");
+                            Navigator.pushNamed(context, "/recoveryPassword");
                           },
                           buttonStyle: ButtonStyle(
                             fixedSize: WidgetStatePropertyAll(

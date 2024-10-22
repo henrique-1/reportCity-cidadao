@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -73,6 +74,8 @@ class MainApp extends StatelessWidget {
           title: "TiddyVille",
           theme: ThemeData(
             useMaterial3: true,
+            fontFamily: GoogleFonts.inter().fontFamily,
+
             // colorScheme: ColorScheme.fromSeed(
             //   seedColor: const Color(0xff82bd69),
             //   primary: const Color(0xff82bd69),

@@ -8,13 +8,15 @@ class TextFormFieldWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final callback;
   final String label;
-  final int maxlines;
+  final int maxLines;
   final TextInputType textInputType;
   final bool isObscure;
   //final double scrollPaddingHeight;
   final TextInputAction textInputAction;
   final List<TextInputFormatter>? textInputFormatter;
   final onEditComplete;
+  final int? maxLength;
+  final MaxLengthEnforcement maxLengthEnforced;
 
   const TextFormFieldWidget({
     super.key,
@@ -22,13 +24,15 @@ class TextFormFieldWidget extends StatefulWidget {
     required this.formKey,
     required this.callback,
     required this.label,
-    required this.maxlines,
+    required this.maxLines,
     required this.textInputType,
     required this.isObscure,
     //required this.scrollPaddingHeight,
     required this.textInputAction,
     this.textInputFormatter,
     this.onEditComplete,
+    /*required*/ this.maxLength,
+    required this.maxLengthEnforced,
   });
 
   @override
@@ -53,13 +57,15 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       autovalidateMode: AutovalidateMode.onUnfocus,
       inputFormatters: widget.textInputFormatter,
       controller: widget.textFormFieldController,
-      maxLines: widget.maxlines,
+      maxLines: widget.maxLines,
       keyboardType: widget.textInputType,
       cursorColor: const Color(0xFF3A6642),
       validator: widget.callback,
       obscureText: widget.isObscure,
       textInputAction: widget.textInputAction,
       onEditingComplete: widget.onEditComplete,
+      maxLength: widget.maxLength,
+      maxLengthEnforcement: widget.maxLengthEnforced,
       style: GoogleFonts.inter(
         fontSize: 17.sp,
         color: const Color(0xFF37623A),
