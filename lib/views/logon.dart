@@ -1,4 +1,6 @@
+import 'package:cidadao/components/password_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
@@ -20,6 +22,8 @@ class Logon extends StatefulWidget {
 
 class _LogonState extends State<Logon> {
   final _logonFormKey = GlobalKey<FormState>();
+  final GlobalKey<FlutterPwValidatorState> _passwordValidatorKey =
+      GlobalKey<FlutterPwValidatorState>();
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
@@ -75,6 +79,7 @@ class _LogonState extends State<Logon> {
         _neighborhoodController.text = response.data['bairro'];
         _cityController.text = response.data['localidade'];
         _stateController.text = response.data['uf'];
+        _logonFormKey.currentState!.validate();
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -198,11 +203,16 @@ class _LogonState extends State<Logon> {
                               }
                             },
                             label: "Nome completo",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.name,
                             isObscure: false,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
                             textInputAction: TextInputAction.next,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(128)
+                            ],
+                            //maxLength: 128,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -222,7 +232,7 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "CPF",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.number,
                             isObscure: false,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
@@ -230,7 +240,10 @@ class _LogonState extends State<Logon> {
                             textInputFormatter: [
                               FilteringTextInputFormatter.digitsOnly,
                               CpfInputFormatter(),
+                              LengthLimitingTextInputFormatter(14)
                             ],
+                            //maxLength: 14,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -246,14 +259,17 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Celular",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.number,
                             isObscure: false,
                             textInputAction: TextInputAction.next,
                             textInputFormatter: [
                               FilteringTextInputFormatter.digitsOnly,
                               TelefoneInputFormatter(),
+                              LengthLimitingTextInputFormatter(15)
                             ],
+                            //maxLength: 11,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -275,8 +291,13 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "E-mail",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.emailAddress,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(255)
+                            ],
+                            // maxLength: 255,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -326,13 +347,14 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "CEP",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.number,
                             isObscure: false,
                             textInputAction: TextInputAction.next,
                             textInputFormatter: [
                               FilteringTextInputFormatter.digitsOnly,
                               CepInputFormatter(),
+                              LengthLimitingTextInputFormatter(10)
                             ],
                             onEditComplete: () {
                               if (_zipController.text.isNotEmpty) {
@@ -344,6 +366,8 @@ class _LogonState extends State<Logon> {
                                 FocusScope.of(context).nextFocus();
                               } else {}
                             },
+                            //maxLength: 8,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -363,10 +387,16 @@ class _LogonState extends State<Logon> {
                                     return null;
                                   },
                                   label: "Rua",
-                                  maxlines: 1,
+                                  maxLines: 1,
                                   textInputType: TextInputType.streetAddress,
                                   isObscure: false,
                                   textInputAction: TextInputAction.next,
+                                  textInputFormatter: [
+                                    LengthLimitingTextInputFormatter(255)
+                                  ],
+                                  //maxLength: 255,
+                                  maxLengthEnforced:
+                                      MaxLengthEnforcement.enforced,
                                 ),
                               ),
                               SizedBox(
@@ -382,10 +412,16 @@ class _LogonState extends State<Logon> {
                                     return null;
                                   },
                                   label: "Numero",
-                                  maxlines: 1,
+                                  maxLines: 1,
                                   textInputType: TextInputType.streetAddress,
                                   isObscure: false,
                                   textInputAction: TextInputAction.next,
+                                  textInputFormatter: [
+                                    LengthLimitingTextInputFormatter(6)
+                                  ],
+                                  //maxLength: 6,
+                                  maxLengthEnforced:
+                                      MaxLengthEnforcement.enforced,
                                 ),
                               )
                             ],
@@ -400,10 +436,12 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Complemento",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.streetAddress,
                             isObscure: false,
                             textInputAction: TextInputAction.next,
+                            maxLength: 16,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -418,10 +456,15 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Bairro",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.streetAddress,
                             isObscure: false,
                             textInputAction: TextInputAction.next,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(64)
+                            ],
+                            //maxLength: 64,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -436,10 +479,15 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Cidade",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.streetAddress,
                             isObscure: false,
                             textInputAction: TextInputAction.next,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(32)
+                            ],
+                            //maxLength: 32,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -454,10 +502,15 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Estado",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.streetAddress,
                             isObscure: false,
                             textInputAction: TextInputAction.next,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(32)
+                            ],
+                            //maxLength: 32,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -511,8 +564,25 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Senha",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.visiblePassword,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(60)
+                            ],
+                            //maxLength: 60,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          PasswordValidator(
+                            validatorStateKey: _passwordValidatorKey,
+                            width: screenSize.width,
+                            height: 150.h,
+                            onSuccessCallback: () {},
+                            onFailureCallback: () {},
+                            passwordController: _passwordController,
+                            minLength: 8,
                           ),
                           SizedBox(
                             height: 8.h,
@@ -537,8 +607,13 @@ class _LogonState extends State<Logon> {
                               return null;
                             },
                             label: "Confirmação de senha",
-                            maxlines: 1,
+                            maxLines: 1,
                             textInputType: TextInputType.visiblePassword,
+                            textInputFormatter: [
+                              LengthLimitingTextInputFormatter(60)
+                            ],
+                            // maxLength: 60,
+                            maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
                         ],
                       ),
@@ -550,7 +625,7 @@ class _LogonState extends State<Logon> {
                   ElevatedButtonWidget(
                     callback: () {
                       if (_logonFormKey.currentState!.validate()) {
-                        Navigator.popAndPushNamed(context, "/home");
+                        Navigator.popAndPushNamed(context, "/");
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
