@@ -1,3 +1,6 @@
+import 'package:cidadao/views/mfa_recovery_password.dart';
+import 'package:cidadao/views/new_password.dart';
+import 'package:cidadao/views/recovery_password.dart';
 import 'package:cidadao/views/home.dart';
 import 'package:cidadao/views/login.dart';
 import 'package:cidadao/views/logon.dart';
@@ -10,6 +13,17 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => const Login(),
         );
+      case "/recovery_password":
+        return MaterialPageRoute(
+          builder: (_) => const RecoveryPassword(),
+        );
+      case "/mfa_recovery_password":
+        return MaterialPageRoute(
+          builder: (_) =>
+              MFARecoveryPassword(email: settings.arguments as String),
+        );
+      case "/new_password":
+        return MaterialPageRoute(builder: (_) => const NewPassword());
       case "/logon":
         return MaterialPageRoute(
           builder: (_) => const Logon(),
