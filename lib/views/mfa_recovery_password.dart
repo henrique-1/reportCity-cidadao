@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cidadao/components/elevatedButton.dart';
 import 'package:cidadao/components/imageAsset.dart';
 import 'package:cidadao/components/textFormField.dart';
-import 'package:email_validator/email_validator.dart';
 
 class MFARecoveryPassword extends StatefulWidget {
   final String email;
