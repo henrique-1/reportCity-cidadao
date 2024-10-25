@@ -8,8 +8,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RecoveryPassword extends StatefulWidget {
+  final String? email;
+
   const RecoveryPassword({
     super.key,
+    this.email,
   });
 
   @override
@@ -31,6 +34,10 @@ class _RecoveryPasswordState extends State<RecoveryPassword> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+
+    if (widget.email!.isNotEmpty) {
+      _emailController.text = widget.email!;
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

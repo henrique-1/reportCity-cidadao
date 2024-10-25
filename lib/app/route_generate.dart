@@ -15,7 +15,7 @@ class RouteGenerator {
         );
       case "/recovery_password":
         return MaterialPageRoute(
-          builder: (_) => const RecoveryPassword(),
+          builder: (_) =>  RecoveryPassword(email: settings.arguments as String),
         );
       case "/mfa_recovery_password":
         return MaterialPageRoute(

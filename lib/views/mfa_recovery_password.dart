@@ -214,7 +214,7 @@ class _MFARecoveryPasswordState extends State<MFARecoveryPassword> {
                           },
                           width_: screenSize.width,
                           height_: 50.h,
-                          label: "Prosseguir com a recuperação",
+                          label: "Prosseguir para a recuperação",
                         ),
                       ],
                     ),

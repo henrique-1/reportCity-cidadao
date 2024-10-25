@@ -170,7 +170,10 @@ class _LoginState extends State<Login> {
                             child: TextButtonWidget(
                               callback: () {
                                 Navigator.pushNamed(
-                                    context, "/recovery_password");
+                                  context,
+                                  "/recovery_password",
+                                  arguments: _emailController.text,
+                                );
                               },
                               buttonStyle: ButtonStyle(
                                 fixedSize: WidgetStatePropertyAll(
