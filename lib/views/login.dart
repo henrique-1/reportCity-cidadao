@@ -115,6 +115,8 @@ class _LoginState extends State<Login> {
                         direction: Axis.vertical,
                         children: [
                           TextFormFieldWidget(
+                            isEnabled: true,
+
                             textFormFieldController: _emailController,
                             isObscure: false,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
@@ -143,6 +145,8 @@ class _LoginState extends State<Login> {
                             height: 8.h,
                           ),
                           TextFormFieldWidget(
+                            isEnabled: true,
+
                             textFormFieldController: _passwordController,
                             isObscure: true,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,

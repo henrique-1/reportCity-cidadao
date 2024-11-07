@@ -1,6 +1,8 @@
 import 'package:cidadao/components/elevatedButton.dart';
+import 'package:cidadao/components/outlinedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class HomeProfile extends StatefulWidget {
   const HomeProfile({super.key});
 
@@ -94,7 +96,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 textAlign: TextAlign.start,
                               ),
                               Text(
-                                "382.924.528-93",
+                                "38X.XXX.XXX-XX",
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
@@ -333,11 +335,27 @@ class _HomeProfileState extends State<HomeProfile> {
                           ),
                         ),
                         ElevatedButtonWidget(
-                          callback: () {},
+                          callback: () {
+                            Navigator.pushNamed(context, "/update_profile");
+                          },
                           width_: screenSize.width,
                           height_: 50.h,
-                          label: "Editar Perfil",
+                          label: "Atualizar Cadastro",
                         ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        OutlinedButtonWidget(
+                          callback: () {
+                            Navigator.pushNamed(
+                                context, "/mfa_recovery_password",
+                                arguments:
+                                    "contato.henrique.bissoli@gmail.com");
+                          },
+                          width_: screenSize.width,
+                          height_: 50.h,
+                          label: "Atualizar Senha",
+                        )
                       ],
                     ),
                   ),

@@ -133,6 +133,8 @@ class _RecoveryPasswordState extends State<RecoveryPassword> {
                             height: 8.h,
                           ),
                           TextFormFieldWidget(
+                            isEnabled: true,
+
                             textFormFieldController: _emailController,
                             isObscure: false,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,

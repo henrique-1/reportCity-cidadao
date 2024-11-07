@@ -21,6 +21,8 @@ class _MFARecoveryPasswordState extends State<MFARecoveryPassword> {
   final TextEditingController _recoveryCodeController = TextEditingController();
   final _passwordRecoveryFormKey = GlobalKey<FormState>();
 
+  String _validatorErrorMessage = "";
+
   @override
   Widget build(BuildContext context) {
     final String emailCidadao = widget.email.replaceRange(
@@ -164,14 +166,22 @@ class _MFARecoveryPasswordState extends State<MFARecoveryPassword> {
                             height: 8.h,
                           ),
                           TextFormFieldWidget(
+                            isEnabled: true,
+
                             textFormFieldController: _recoveryCodeController,
                             isObscure: false,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
                             textInputAction: TextInputAction.done,
                             formKey: _passwordRecoveryFormKey,
                             callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira o código de recuperação";
+                              if (value.length < 8 && !value!.isEmpty) {
+                                _validatorErrorMessage =
+                                    "O código de verificação deve possuir ao menos 8 caracteres";
+                                return "Código de verificação incorreto";
+                              } else if (value!.isEmpty) {
+                                _validatorErrorMessage =
+                                    "Insira o código de recuperação";
+                                return _validatorErrorMessage;
                               }
                               return null;
                             },
@@ -203,9 +213,9 @@ class _MFARecoveryPasswordState extends State<MFARecoveryPassword> {
                                   context, "/new_password");
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   content: Text(
-                                    'Insira o código de recuperação de senha!',
+                                    _validatorErrorMessage,
                                   ),
                                 ),
                               );

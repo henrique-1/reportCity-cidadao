@@ -101,6 +101,8 @@ class _NewPasswordState extends State<NewPassword> {
                         direction: Axis.vertical,
                         children: [
                           TextFormFieldWidget(
+                            isEnabled: true,
+
                             textFormFieldController: _passwordController,
                             isObscure: true,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
@@ -130,7 +132,7 @@ class _NewPasswordState extends State<NewPassword> {
                             width: screenSize.width,
                             height: 150.h,
                             onSuccessCallback: () {},
-                            onFailureCallback: () {},
+                            onFailureCallback: (value) {},
                             passwordController: _passwordController,
                             minLength: 8,
                           ),
@@ -138,6 +140,8 @@ class _NewPasswordState extends State<NewPassword> {
                             height: 8.h,
                           ),
                           TextFormFieldWidget(
+                            isEnabled: true,
+
                             textFormFieldController:
                                 _passwordConfirmationController,
                             isObscure: true,

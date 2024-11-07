@@ -1,36 +1,30 @@
-import 'package:cidadao/components/password_validator.dart';
+import 'package:cidadao/components/elevatedButton.dart';
+import 'package:cidadao/components/imageAsset.dart';
+import 'package:cidadao/components/outlinedButton.dart';
+import 'package:cidadao/components/textFormField.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pw_validator/flutter_pw_validator.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:cidadao/components/elevatedButton.dart';
-import 'package:cidadao/components/imageAsset.dart';
-import 'package:cidadao/components/textFormField.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class Logon extends StatefulWidget {
-  const Logon({super.key});
+class UpdateProfile extends StatefulWidget {
+  const UpdateProfile({super.key});
 
   @override
-  State<Logon> createState() => _LogonState();
+  State<UpdateProfile> createState() => _UpdateProfileState();
 }
 
-class _LogonState extends State<Logon> {
-  final _logonFormKey = GlobalKey<FormState>();
-  final GlobalKey<FlutterPwValidatorState> _passwordValidatorKey =
-      GlobalKey<FlutterPwValidatorState>();
+class _UpdateProfileState extends State<UpdateProfile> {
+  final _updateProfileState = GlobalKey<FormState>();
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmationController =
-      TextEditingController();
   final TextEditingController _zipController = TextEditingController();
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _houseNumberController = TextEditingController();
@@ -46,8 +40,6 @@ class _LogonState extends State<Logon> {
     _cpfController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
-    _passwordConfirmationController.dispose();
     _zipController.dispose();
     _streetController.dispose();
     _houseNumberController.dispose();
@@ -78,7 +70,7 @@ class _LogonState extends State<Logon> {
         _neighborhoodController.text = response.data['bairro'];
         _cityController.text = response.data['localidade'];
         _stateController.text = response.data['uf'];
-        _logonFormKey.currentState!.validate();
+        _updateProfileState.currentState!.validate();
       }
     } on DioException catch (e) {
       if (e.response != null) {
@@ -92,21 +84,6 @@ class _LogonState extends State<Logon> {
       }
     }
   }
-
-  /// Cadastro:
-  /// - Nome Completo
-  /// - CPF
-  /// - Telefone celular
-  /// - E-mail
-  /// - CEP
-  /// - Logradouro (RUA)
-  /// - Numero
-  /// - Complemento
-  /// - Bairro
-  /// - Cidade
-  /// - Estado
-  /// - Senha
-  /// - Confirmação de Senha
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +103,11 @@ class _LogonState extends State<Logon> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: SizedBox(
-                        width: 300.w,
+                        width: 250.w,
                         child: Center(
                           child: Text.rich(
                             TextSpan(
@@ -141,32 +118,17 @@ class _LogonState extends State<Logon> {
                               ),
                               children: const [
                                 TextSpan(
-                                  text: 'Seja bem-vindo',
+                                  text: 'Atualizar o',
                                 ),
                                 TextSpan(
-                                  text: ', ',
+                                  text: ' ',
                                 ),
                                 TextSpan(
-                                  text: 'realize o',
-                                ),
-                                TextSpan(
-                                  text: " ",
-                                ),
-                                TextSpan(
-                                  text: 'Cadastro',
+                                  text: 'Cadastro!',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     decoration: TextDecoration.underline,
                                   ),
-                                ),
-                                TextSpan(
-                                  text: " ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "para continuar!",
                                 ),
                               ],
                             ),
@@ -187,9 +149,9 @@ class _LogonState extends State<Logon> {
                     ),
                   ),
                   Expanded(
-                    flex: 19,
+                    flex: 11,
                     child: Form(
-                      key: _logonFormKey,
+                      key: _updateProfileState,
                       child: Flex(
                         direction: Axis.vertical,
                         children: [
@@ -197,7 +159,7 @@ class _LogonState extends State<Logon> {
                             isEnabled: true,
 
                             textFormFieldController: _fullNameController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value!.isEmpty) {
                                 return "Insira seu nome completo!";
@@ -219,10 +181,9 @@ class _LogonState extends State<Logon> {
                             height: 8.h,
                           ),
                           TextFormFieldWidget(
-                            isEnabled: true,
-
+                            isEnabled: false,
                             textFormFieldController: _cpfController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value!.isEmpty) {
                                 return "Insira seu CPF!";
@@ -255,7 +216,7 @@ class _LogonState extends State<Logon> {
                             isEnabled: true,
 
                             textFormFieldController: _phoneController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value.isEmpty) {
                                 return "Insira seu celular";
@@ -286,7 +247,7 @@ class _LogonState extends State<Logon> {
                             isObscure: false,
                             //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
                             textInputAction: TextInputAction.next,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value!.isEmpty) {
                                 return "Insira seu e-mail!";
@@ -346,9 +307,8 @@ class _LogonState extends State<Logon> {
                           ),
                           TextFormFieldWidget(
                             isEnabled: true,
-
                             textFormFieldController: _zipController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value!.isEmpty) {
                                 return "Insira seu CEP!";
@@ -390,7 +350,7 @@ class _LogonState extends State<Logon> {
                                   isEnabled: true,
 
                                   textFormFieldController: _streetController,
-                                  formKey: _logonFormKey,
+                                  formKey: _updateProfileState,
                                   callback: (value) {
                                     if (value!.isEmpty) {
                                       return "Insira a rua!";
@@ -417,7 +377,7 @@ class _LogonState extends State<Logon> {
 
                                   textFormFieldController:
                                       _houseNumberController,
-                                  formKey: _logonFormKey,
+                                  formKey: _updateProfileState,
                                   callback: (value) {
                                     if (value!.isEmpty) {
                                       return "Insira o número!";
@@ -445,7 +405,7 @@ class _LogonState extends State<Logon> {
                           TextFormFieldWidget(
                             isEnabled: true,
                             textFormFieldController: _complementController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               return null;
                             },
@@ -464,7 +424,7 @@ class _LogonState extends State<Logon> {
                             isEnabled: true,
 
                             textFormFieldController: _neighborhoodController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value.isEmpty) {
                                 return "Insira o bairro!";
@@ -489,7 +449,7 @@ class _LogonState extends State<Logon> {
                             isEnabled: true,
 
                             textFormFieldController: _cityController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value.isEmpty) {
                                 return "Insira a cidade!";
@@ -514,7 +474,7 @@ class _LogonState extends State<Logon> {
                             isEnabled: true,
 
                             textFormFieldController: _stateController,
-                            formKey: _logonFormKey,
+                            formKey: _updateProfileState,
                             callback: (value) {
                               if (value.isEmpty) {
                                 return "Insira o estado!";
@@ -532,113 +492,6 @@ class _LogonState extends State<Logon> {
                             //maxLength: 32,
                             maxLengthEnforced: MaxLengthEnforcement.enforced,
                           ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              const Expanded(
-                                flex: 3,
-                                child: Divider(
-                                  color: Color(0xFF9e9d99),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "Senha",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12.sp,
-                                    color:
-                                        const Color.fromARGB(255, 77, 71, 50),
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.67.sp,
-                                  ),
-                                ),
-                              ),
-                              const Expanded(
-                                flex: 3,
-                                child: Divider(
-                                  color: Color(0xFF9e9d99),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
-
-                            textFormFieldController: _passwordController,
-                            isObscure: true,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.next,
-                            formKey: _logonFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira sua senha!";
-                              }
-
-                              return null;
-                            },
-                            label: "Senha",
-                            maxLines: 1,
-                            textInputType: TextInputType.visiblePassword,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(60)
-                            ],
-                            //maxLength: 60,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          PasswordValidator(
-                            validatorStateKey: _passwordValidatorKey,
-                            width: screenSize.width,
-                            height: 150.h,
-                            onSuccessCallback: () {},
-                            onFailureCallback: () {},
-                            passwordController: _passwordController,
-                            minLength: 8,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
-
-                            textFormFieldController:
-                                _passwordConfirmationController,
-                            isObscure: true,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.done,
-                            formKey: _logonFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira a confirmação da sua senha!";
-                              }
-
-                              if (_passwordController.text !=
-                                  _passwordConfirmationController.text) {
-                                return "As senhas devem ser idênticas";
-                              }
-
-                              return null;
-                            },
-                            label: "Confirmação de senha",
-                            maxLines: 1,
-                            textInputType: TextInputType.visiblePassword,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(60)
-                            ],
-                            // maxLength: 60,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
                         ],
                       ),
                     ),
@@ -648,8 +501,8 @@ class _LogonState extends State<Logon> {
                   ),
                   ElevatedButtonWidget(
                     callback: () {
-                      if (_logonFormKey.currentState!.validate()) {
-                        Navigator.popAndPushNamed(context, "/");
+                      if (_updateProfileState.currentState!.validate()) {
+                        Navigator.popAndPushNamed(context, "/home");
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -662,7 +515,7 @@ class _LogonState extends State<Logon> {
                     },
                     width_: screenSize.width,
                     height_: 50.h,
-                    label: "Cadastrar",
+                    label: "Atualizar",
                   ),
                   SizedBox(
                     height: 8.h,

@@ -9,6 +9,8 @@ class HomeReport extends StatefulWidget {
 }
 
 class _HomeReportState extends State<HomeReport> {
+  int reportsAmount = 1;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,11 +23,24 @@ class _HomeReportState extends State<HomeReport> {
           onRefresh: () => Future.delayed(
             const Duration(seconds: 1),
           ),
-          child: const SingleChildScrollView(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: IntrinsicHeight(
-              child: Column(
-                children: [],
-              ),
+              child: reportsAmount == 0
+                  ? const Align(
+                      alignment: Alignment.center,
+                      child: Text("Nenhuma denúncia foi realizada"),
+                    )
+                  : const Column(
+                      // children: [
+                      //   for (int x = 1; x <= 4; x++) ...[
+                      //     Container(
+                      //       height: 100,
+                      //       color: Colors.redAccent,
+                      //     )
+                      //   ]
+                      // ],
+                      ),
             ),
           ),
         ),

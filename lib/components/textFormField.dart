@@ -17,6 +17,7 @@ class TextFormFieldWidget extends StatefulWidget {
   final onEditComplete;
   final int? maxLength;
   final MaxLengthEnforcement maxLengthEnforced;
+  final bool isEnabled;
 
   const TextFormFieldWidget({
     super.key,
@@ -33,6 +34,7 @@ class TextFormFieldWidget extends StatefulWidget {
     this.onEditComplete,
     /*required*/ this.maxLength,
     required this.maxLengthEnforced,
+    required this.isEnabled,
   });
 
   @override
@@ -54,6 +56,7 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       // scrollPadding: EdgeInsets.symmetric(
       //   vertical: scrollPaddingHeight,
       // ),
+      enabled: widget.isEnabled,
       autovalidateMode: AutovalidateMode.onUnfocus,
       inputFormatters: widget.textInputFormatter,
       controller: widget.textFormFieldController,
@@ -87,6 +90,14 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
         labelStyle: GoogleFonts.inter(
           fontSize: 12.sp,
           color: const Color(0xFF8b8a84),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(
+            color: Color(0xFF8b8a84),
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.r),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
