@@ -2,11 +2,10 @@ name: "Build & Dev-Release"
 on:
   pull_request:
     branches:
-      - release
+      - main
   push:
     branches:
-      - dev
-      - test
+      - main
 jobs:
   build:
     name: Build & Dev-Release
