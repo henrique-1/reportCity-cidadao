@@ -1,4 +1,4 @@
-name: "Build & Release"
+name: "Build & Dev-Release"
 on:
   pull_request:
     branches:
@@ -9,22 +9,23 @@ on:
       - test
 jobs:
   build:
-    name: Build & Release
-    runs-on: macos-latest
-
+    name: Build & Dev-Release
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Set Up Java
-        uses: actions/setup-java@v3.12.0
+        uses: actions/checkout@v4
+      - name: Set Up Java Version
+        uses: actions/setup-java@v3
         with:
-          distribution: "oracle"
+          distribution: "zulu"
           java-version: "17"
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.24.0"
           channel: "stable"
+      - name: Clean App Dependencies
+        run: flutter clean
       - name: Install Dependencies
         run: flutter pub get
       - name: Decode Keystore
@@ -37,45 +38,21 @@ jobs:
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
       - name: Build APK
-        run: flutter build apk
-      - name: Build appBundle
-        run: flutter build appbundle
-      - name: Build IPA
-        run: flutter build ipa --no-codesign
-      - name: Compress Archives and IPAs
-        run: |
-          cd build
-          tar -czf ios_build.tar.gz ios
+        run: flutter build apk --debug
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Releases
+          name: Dev Release
           path: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
-            build/ios_build.tar.g
+            build/app/outputs/flutter-apk/app-debug.apk
       - name: Extract version from pubspec.yaml
         id: extract_version
         run: |
           version=$(grep '^version: ' pubspec.yaml | cut -d ' ' -f 2 | tr -d '\r')
           echo "VERSION=$version" >> $GITHUB_ENV
-      - name: Check if Tag Exists
-        id: check_tag
-        run: |
-          if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
-            echo "TAG_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "TAG_EXISTS=false" >> $GITHUB_ENV
-          fi
-      - name: Modify Tag
-        if: env.TAG_EXISTS == 'true'
-        id: modify_tag
-        run: |
-          new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
-          echo "VERSION=$new_version" >> $GITHUB_ENV
-      - name: Create Release
+      - name: Create Dev-Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios_build.tar.gz"
+          artifacts: "build/app/outputs/flutter-apk/app-debug.apk"
           tag: v${{ env.VERSION }}
           token: ${{ secrets.TOKEN }}

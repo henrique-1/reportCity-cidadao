@@ -1,3 +1,3 @@
-# reportCity-cidadao
+# ReportCity
 
-A new Flutter project.
+## Como Instalar?

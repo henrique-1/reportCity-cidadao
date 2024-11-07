@@ -3,6 +3,8 @@ import 'package:cidadao/app/route_generate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -13,6 +15,9 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error in fetching the cameras: $e');
   }
+
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   runApp(const MainApp());
 }
@@ -53,9 +58,10 @@ Future<Position> determinePosition() async {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
-
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
+
     return ScreenUtilInit(
       //iPhone 14/15 Pro Max size
       designSize: const Size(430, 932),
@@ -68,6 +74,8 @@ class MainApp extends StatelessWidget {
           title: "TiddyVille",
           theme: ThemeData(
             useMaterial3: true,
+            fontFamily: GoogleFonts.inter().fontFamily,
+
             // colorScheme: ColorScheme.fromSeed(
             //   seedColor: const Color(0xff82bd69),
             //   primary: const Color(0xff82bd69),
