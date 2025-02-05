@@ -47,10 +47,10 @@ class _HomeProfileState extends State<HomeProfile> {
                     spreadRadius: 2.r,
                   ),
                 ],
-                color: const Color(0xFFDCDCDA),
+                color: const Color(0xFFEFEFEF),
               ),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(8.w, 20.h, 8.w, 8.h),
+                padding: EdgeInsets.fromLTRB(8.w, 60.h, 8.w, 8.h),
                 child: SingleChildScrollView(
                   child: IntrinsicHeight(
                     child: Column(
@@ -75,6 +75,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -100,6 +101,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -125,6 +127,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -150,6 +153,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -175,6 +179,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -202,6 +207,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                     style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.normal,
+                                      color: Color(0XFF262624),
                                     ),
                                   )
                                 ],
@@ -227,6 +233,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                     style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.normal,
+                                      color: Color(0XFF262624),
                                     ),
                                   )
                                 ],
@@ -254,6 +261,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -279,6 +287,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -304,6 +313,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -329,6 +339,7 @@ class _HomeProfileState extends State<HomeProfile> {
                                 style: TextStyle(
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.normal,
+                                  color: Color(0XFF262624),
                                 ),
                               )
                             ],
@@ -362,6 +373,42 @@ class _HomeProfileState extends State<HomeProfile> {
                 ),
               ),
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 280.h, left: 30.w),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 90.w,
+                      height: 90.h,
+                      decoration: BoxDecoration(
+                          color: Colors.red, shape: BoxShape.circle),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 50.h, left: 55.w),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        width: 45.w,
+                        height: 45.h,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.upload,
+                            size: 25.0,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/image_picker");
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
           ),
         ],
       ),

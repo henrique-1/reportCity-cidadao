@@ -17,10 +17,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFFDCDCDA),
+      backgroundColor: const Color(0xFFEFEFEF),
       bottomNavigationBar: NavigationBar(
         backgroundColor: const Color(0xFFf6f6f6),
         onDestinationSelected: (int index) {
@@ -59,7 +58,9 @@ class _HomeState extends State<Home> {
       floatingActionButton: Visibility(
         visible: currentPageIndex == 0 || currentPageIndex == 2 ? false : true,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, "/report");
+          },
           backgroundColor: const Color(0xFFcee4d2),
           label: Text(
             "Denunciar",

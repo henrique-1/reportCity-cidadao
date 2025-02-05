@@ -17,11 +17,11 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: "zulu"
-          java-version: "17"
+          java-version: "23"
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.0"
+          flutter-version: "3.27.1"
           channel: "stable"
       - name: Clean App Dependencies
         run: flutter clean

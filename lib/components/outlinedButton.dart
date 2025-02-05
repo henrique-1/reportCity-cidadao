@@ -26,14 +26,19 @@ class OutlinedButtonWidget extends StatelessWidget {
           Size(width_, height_),
         ),
         overlayColor: WidgetStatePropertyAll(
-          const Color(0xFFa6cfad).withOpacity(0.2),
+          Theme.of(context)
+              .colorScheme
+              .primary
+              .withValues(alpha: 0.2), // Usando a cor primária com opacidade
         ),
       ),
       child: Text(
         label,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.montserrat(
           fontSize: 16.sp,
-          color: const Color(0xFF3a6642),
+          color: Theme.of(context)
+              .colorScheme
+              .primary, // Usando a cor primária do tema          fontWeight: FontWeight.w500,
           fontWeight: FontWeight.w500,
           height: 1.5.h,
         ),

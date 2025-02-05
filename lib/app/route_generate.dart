@@ -1,9 +1,13 @@
 import 'package:cidadao/views/mfa_recovery_password.dart';
 import 'package:cidadao/views/new_password.dart';
+import 'package:cidadao/views/profile_image_picker.dart';
 import 'package:cidadao/views/recovery_password.dart';
 import 'package:cidadao/views/home.dart';
 import 'package:cidadao/views/login.dart';
 import 'package:cidadao/views/logon.dart';
+import 'package:cidadao/views/report.dart';
+import 'package:cidadao/views/report_image_picker.dart';
+// import 'package:cidadao/views/report.dart';
 import 'package:cidadao/views/update_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -38,6 +42,18 @@ class RouteGenerator {
       case "/update_profile":
         return MaterialPageRoute(
           builder: (_) => const UpdateProfile(),
+        );
+      case "/image_picker":
+        return MaterialPageRoute(
+          builder: (_) => const PorfileImagePicker(),
+        );
+      case "/report":
+        return MaterialPageRoute(
+          builder: (_) => const Report(),
+        );
+      case "/report_image":
+        return MaterialPageRoute(
+          builder: (_) => const ReportImagePicker(),
         );
       default:
         return _erroRota();

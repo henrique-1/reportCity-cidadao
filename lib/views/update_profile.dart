@@ -1,6 +1,5 @@
 import 'package:cidadao/components/elevatedButton.dart';
 import 'package:cidadao/components/imageAsset.dart';
-import 'package:cidadao/components/outlinedButton.dart';
 import 'package:cidadao/components/textFormField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -91,7 +90,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFFDCDCDA),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -102,402 +101,365 @@ class _UpdateProfileState extends State<UpdateProfile> {
             child: IntrinsicHeight(
               child: Column(
                 children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        width: 250.w,
-                        child: Center(
-                          child: Text.rich(
-                            TextSpan(
-                              style: GoogleFonts.inter(
-                                fontSize: 22.0.sp,
-                                color: const Color(0xFF262624),
-                                height: 1.45.h,
-                              ),
-                              children: const [
-                                TextSpan(
-                                  text: 'Atualizar o',
-                                ),
-                                TextSpan(
-                                  text: ' ',
-                                ),
-                                TextSpan(
-                                  text: 'Cadastro!',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                  SizedBox(
+                    height: 120.h,
+                  ),
+                  ImageAsset(
+                    asset: 'assets/reportCityLogoConverted.png',
+                    width_: screenSize.height / 5,
+                    height_: screenSize.height / 5,
+                    imageAlignment: Alignment.center,
+                    hasAntiAlias: true,
+                    imageFilterQuality: FilterQuality.high,
+                  ),
+                  SizedBox(
+                    height: 24.h,
+                  ),
+                  Form(
+                    key: _updateProfileState,
+                    child: Flex(
+                      direction: Axis.vertical,
+                      children: [
+                        TextFormFieldWidget(
+                          isEnabled: true,
+
+                          textFormFieldController: _fullNameController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira seu nome completo!";
+                            }
+                          },
+                          label: "Nome completo",
+                          maxLines: 1,
+                          textInputType: TextInputType.name,
+                          isObscure: false,
+                          //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(128)
+                          ],
+                          //maxLength: 128,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
                         ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: ImageAsset(
-                      asset: 'assets/reportCityLogo.png',
-                      width_: screenSize.height / 5,
-                      height_: screenSize.height / 5,
-                      imageAlignment: Alignment.center,
-                      hasAntiAlias: true,
-                      imageFilterQuality: FilterQuality.high,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 11,
-                    child: Form(
-                      key: _updateProfileState,
-                      child: Flex(
-                        direction: Axis.vertical,
-                        children: [
-                          TextFormFieldWidget(
-                            isEnabled: true,
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: false,
+                          textFormFieldController: _cpfController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira seu CPF!";
+                            }
 
-                            textFormFieldController: _fullNameController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira seu nome completo!";
-                              }
-                            },
-                            label: "Nome completo",
-                            maxLines: 1,
-                            textInputType: TextInputType.name,
-                            isObscure: false,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(128)
-                            ],
-                            //maxLength: 128,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: false,
-                            textFormFieldController: _cpfController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira seu CPF!";
-                              }
+                            if (!GetUtils.isCpf(value)) {
+                              return "CPF incorreto";
+                            }
 
-                              if (!GetUtils.isCpf(value)) {
-                                return "CPF incorreto";
-                              }
+                            return null;
+                          },
+                          label: "CPF",
+                          maxLines: 1,
+                          textInputType: TextInputType.number,
+                          isObscure: false,
+                          //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CpfInputFormatter(),
+                            LengthLimitingTextInputFormatter(14)
+                          ],
+                          //maxLength: 14,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
 
-                              return null;
-                            },
-                            label: "CPF",
-                            maxLines: 1,
-                            textInputType: TextInputType.number,
-                            isObscure: false,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CpfInputFormatter(),
-                              LengthLimitingTextInputFormatter(14)
-                            ],
-                            //maxLength: 14,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
+                          textFormFieldController: _phoneController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value.isEmpty) {
+                              return "Insira seu celular";
+                            }
 
-                            textFormFieldController: _phoneController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value.isEmpty) {
-                                return "Insira seu celular";
-                              }
+                            return null;
+                          },
+                          label: "Celular",
+                          maxLines: 1,
+                          textInputType: TextInputType.number,
+                          isObscure: false,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            TelefoneInputFormatter(),
+                            LengthLimitingTextInputFormatter(15)
+                          ],
+                          //maxLength: 11,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
 
-                              return null;
-                            },
-                            label: "Celular",
-                            maxLines: 1,
-                            textInputType: TextInputType.number,
-                            isObscure: false,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              TelefoneInputFormatter(),
-                              LengthLimitingTextInputFormatter(15)
-                            ],
-                            //maxLength: 11,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
+                          textFormFieldController: _emailController,
+                          isObscure: false,
+                          //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                          textInputAction: TextInputAction.next,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira seu e-mail!";
+                            }
 
-                            textFormFieldController: _emailController,
-                            isObscure: false,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.next,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira seu e-mail!";
-                              }
-
-                              if (!EmailValidator.validate(value)) {
-                                return "E-mail incorreto!";
-                              }
-                              return null;
-                            },
-                            label: "E-mail",
-                            maxLines: 1,
-                            textInputType: TextInputType.emailAddress,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(255)
-                            ],
-                            // maxLength: 255,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              const Expanded(
-                                flex: 3,
-                                child: Divider(
-                                  color: Color(0xFF9e9d99),
+                            if (!EmailValidator.validate(value)) {
+                              return "E-mail incorreto!";
+                            }
+                            return null;
+                          },
+                          label: "E-mail",
+                          maxLines: 1,
+                          textInputType: TextInputType.emailAddress,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(255)
+                          ],
+                          // maxLength: 255,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 16.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const Expanded(
+                              flex: 3,
+                              child: Divider(
+                                color: Color(0xFF9e9d99),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                "Endereço",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  fontSize: 12.sp,
+                                  color: const Color.fromARGB(255, 77, 71, 50),
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.67.sp,
                                 ),
                               ),
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "Endereço",
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.inter(
-                                    fontSize: 12.sp,
-                                    color:
-                                        const Color.fromARGB(255, 77, 71, 50),
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.67.sp,
-                                  ),
-                                ),
+                            ),
+                            const Expanded(
+                              flex: 3,
+                              child: Divider(
+                                color: Color(0xFF9e9d99),
                               ),
-                              const Expanded(
-                                flex: 3,
-                                child: Divider(
-                                  color: Color(0xFF9e9d99),
-                                ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 16.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
+                          textFormFieldController: _zipController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira seu CEP!";
+                            }
+                            return null;
+                          },
+                          label: "CEP",
+                          maxLines: 1,
+                          textInputType: TextInputType.number,
+                          isObscure: false,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            CepInputFormatter(),
+                            LengthLimitingTextInputFormatter(10)
+                          ],
+                          onEditComplete: () {
+                            if (_zipController.text.isNotEmpty) {
+                              final String normalizedZipCode =
+                                  UtilBrasilFields.removeCaracteres(
+                                      _zipController.text);
+
+                              getZipCodeInfo(normalizedZipCode);
+                              FocusScope.of(context).nextFocus();
+                            } else {}
+                          },
+                          //maxLength: 8,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: screenSize.width * 0.65,
+                              child: TextFormFieldWidget(
+                                isEnabled: true,
+
+                                textFormFieldController: _streetController,
+                                formKey: _updateProfileState,
+                                callback: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Insira a rua!";
+                                  }
+                                  return null;
+                                },
+                                label: "Rua",
+                                maxLines: 1,
+                                textInputType: TextInputType.streetAddress,
+                                isObscure: false,
+                                textInputAction: TextInputAction.next,
+                                textInputFormatter: [
+                                  LengthLimitingTextInputFormatter(255)
+                                ],
+                                //maxLength: 255,
+                                maxLengthEnforced:
+                                    MaxLengthEnforcement.enforced,
                               ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
-                            textFormFieldController: _zipController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira seu CEP!";
-                              }
-                              return null;
-                            },
-                            label: "CEP",
-                            maxLines: 1,
-                            textInputType: TextInputType.number,
-                            isObscure: false,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              CepInputFormatter(),
-                              LengthLimitingTextInputFormatter(10)
-                            ],
-                            onEditComplete: () {
-                              if (_zipController.text.isNotEmpty) {
-                                final String normalizedZipCode =
-                                    UtilBrasilFields.removeCaracteres(
-                                        _zipController.text);
+                            ),
+                            SizedBox(
+                              width: screenSize.width * 0.3,
+                              child: TextFormFieldWidget(
+                                isEnabled: true,
 
-                                getZipCodeInfo(normalizedZipCode);
-                                FocusScope.of(context).nextFocus();
-                              } else {}
-                            },
-                            //maxLength: 8,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: screenSize.width * 0.65,
-                                child: TextFormFieldWidget(
-                                  isEnabled: true,
-
-                                  textFormFieldController: _streetController,
-                                  formKey: _updateProfileState,
-                                  callback: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Insira a rua!";
-                                    }
-                                    return null;
-                                  },
-                                  label: "Rua",
-                                  maxLines: 1,
-                                  textInputType: TextInputType.streetAddress,
-                                  isObscure: false,
-                                  textInputAction: TextInputAction.next,
-                                  textInputFormatter: [
-                                    LengthLimitingTextInputFormatter(255)
-                                  ],
-                                  //maxLength: 255,
-                                  maxLengthEnforced:
-                                      MaxLengthEnforcement.enforced,
-                                ),
+                                textFormFieldController: _houseNumberController,
+                                formKey: _updateProfileState,
+                                callback: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Insira o número!";
+                                  }
+                                  return null;
+                                },
+                                label: "Numero",
+                                maxLines: 1,
+                                textInputType: TextInputType.streetAddress,
+                                isObscure: false,
+                                textInputAction: TextInputAction.next,
+                                textInputFormatter: [
+                                  LengthLimitingTextInputFormatter(6)
+                                ],
+                                //maxLength: 6,
+                                maxLengthEnforced:
+                                    MaxLengthEnforcement.enforced,
                               ),
-                              SizedBox(
-                                width: screenSize.width * 0.3,
-                                child: TextFormFieldWidget(
-                                  isEnabled: true,
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
+                          textFormFieldController: _complementController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            return null;
+                          },
+                          label: "Complemento",
+                          maxLines: 1,
+                          textInputType: TextInputType.streetAddress,
+                          isObscure: false,
+                          textInputAction: TextInputAction.next,
+                          maxLength: 16,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
 
-                                  textFormFieldController:
-                                      _houseNumberController,
-                                  formKey: _updateProfileState,
-                                  callback: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Insira o número!";
-                                    }
-                                    return null;
-                                  },
-                                  label: "Numero",
-                                  maxLines: 1,
-                                  textInputType: TextInputType.streetAddress,
-                                  isObscure: false,
-                                  textInputAction: TextInputAction.next,
-                                  textInputFormatter: [
-                                    LengthLimitingTextInputFormatter(6)
-                                  ],
-                                  //maxLength: 6,
-                                  maxLengthEnforced:
-                                      MaxLengthEnforcement.enforced,
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
-                            textFormFieldController: _complementController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              return null;
-                            },
-                            label: "Complemento",
-                            maxLines: 1,
-                            textInputType: TextInputType.streetAddress,
-                            isObscure: false,
-                            textInputAction: TextInputAction.next,
-                            maxLength: 16,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
+                          textFormFieldController: _neighborhoodController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value.isEmpty) {
+                              return "Insira o bairro!";
+                            }
+                            return null;
+                          },
+                          label: "Bairro",
+                          maxLines: 1,
+                          textInputType: TextInputType.streetAddress,
+                          isObscure: false,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(64)
+                          ],
+                          //maxLength: 64,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
 
-                            textFormFieldController: _neighborhoodController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value.isEmpty) {
-                                return "Insira o bairro!";
-                              }
-                              return null;
-                            },
-                            label: "Bairro",
-                            maxLines: 1,
-                            textInputType: TextInputType.streetAddress,
-                            isObscure: false,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(64)
-                            ],
-                            //maxLength: 64,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
+                          textFormFieldController: _cityController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value.isEmpty) {
+                              return "Insira a cidade!";
+                            }
+                            return null;
+                          },
+                          label: "Cidade",
+                          maxLines: 1,
+                          textInputType: TextInputType.streetAddress,
+                          isObscure: false,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(32)
+                          ],
+                          //maxLength: 32,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
 
-                            textFormFieldController: _cityController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value.isEmpty) {
-                                return "Insira a cidade!";
-                              }
-                              return null;
-                            },
-                            label: "Cidade",
-                            maxLines: 1,
-                            textInputType: TextInputType.streetAddress,
-                            isObscure: false,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(32)
-                            ],
-                            //maxLength: 32,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
-
-                            textFormFieldController: _stateController,
-                            formKey: _updateProfileState,
-                            callback: (value) {
-                              if (value.isEmpty) {
-                                return "Insira o estado!";
-                              }
-                              return null;
-                            },
-                            label: "Estado",
-                            maxLines: 1,
-                            textInputType: TextInputType.streetAddress,
-                            isObscure: false,
-                            textInputAction: TextInputAction.next,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(32)
-                            ],
-                            //maxLength: 32,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                        ],
-                      ),
+                          textFormFieldController: _stateController,
+                          formKey: _updateProfileState,
+                          callback: (value) {
+                            if (value.isEmpty) {
+                              return "Insira o estado!";
+                            }
+                            return null;
+                          },
+                          label: "Estado",
+                          maxLines: 1,
+                          textInputType: TextInputType.streetAddress,
+                          isObscure: false,
+                          textInputAction: TextInputAction.next,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(32)
+                          ],
+                          //maxLength: 32,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
-                    height: 16.h,
+                    height: 32.h,
                   ),
                   ElevatedButtonWidget(
                     callback: () {

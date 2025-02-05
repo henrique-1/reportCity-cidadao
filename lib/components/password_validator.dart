@@ -55,9 +55,14 @@ class _PasswordValidatorState extends State<PasswordValidator> {
       uppercaseCharCount: 1,
       numericCharCount: 2,
       specialCharCount: 1,
-      failureColor: const Color(0xFFbc6262),
-      successColor: const Color(0xFF3A6642),
-      defaultColor: const Color(0xFF8b8a84),
+      failureColor:
+          Theme.of(context).colorScheme.error, // Usando a cor de erro do tema
+      successColor: Theme.of(context)
+          .colorScheme
+          .primary, // Usando a cor primária do tema
+      defaultColor: Theme.of(context)
+          .colorScheme
+          .outline, // Usando a cor de outline do tema
       strings: PortugueseStrings(),
     );
   }

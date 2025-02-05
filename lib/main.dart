@@ -59,11 +59,11 @@ Future<Position> determinePosition() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext   context) {
     FlutterNativeSplash.remove();
 
     return ScreenUtilInit(
-      //iPhone 14/15 Pro Max size
+      // iPhone 14/15 Pro Max size
       designSize: const Size(430, 932),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -72,16 +72,241 @@ class MainApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           debugShowMaterialGrid: false,
           title: "TiddyVille",
+          // theme: ThemeData(
+          //   useMaterial3: true,
+          //   fontFamily: GoogleFonts.inter().fontFamily,
+          //   colorScheme: ColorScheme(
+          //     brightness: Brightness.light,
+          //     primary: Color(0xFF3a6642), // Verde 1 (700) - Cor primária
+          //     onPrimary: Color(
+          //         0xFFf6f6f6), // Cinza (50) - Cor do texto sobre a cor primária
+          //     secondary:
+          //         Color(0xFF88bc64), // Verde Claro (400) - Cor secundária
+          //     onSecondary: Color(
+          //         0xFF2e4d34), // Verde 1 (800) - Cor do texto sobre a cor secundária
+          //     error: Color(
+          //         0xFFbc6262), // Cor de erro (não presente no esquema, variação de vermelho)
+          //     onError:
+          //         Colors.white, // Verde 1 (900) - Cor do texto sobre o fundo
+          //     surface: Color(
+          //         0xFFf6f6f6), // Cinza (50) - Cor de superfície (cards, etc.)
+          //     onSurface: Color(
+          //         0xFF37623A), // Verde 2 (700) - Cor do texto sobre a superfície
+          //     outline: Color(0xFF3A6642), // Verde 1 (700) - Usado para bordas
+          //   ),
+          //   navigationBarTheme: const NavigationBarThemeData(
+          //     backgroundColor: Color(0xFFf6f6f6), // Cinza (50)
+          //     indicatorColor: Color(0xFFcee4d2), // Verde 1 (200)
+          //     iconTheme: WidgetStatePropertyAll(
+          //       IconThemeData(
+          //         color: Color(
+          //             0xFF8b8a84), // Cinza (500) - Cor dos ícones não selecionados
+          //       ),
+          //     ),
+          //     labelTextStyle: WidgetStatePropertyAll(
+          //       TextStyle(
+          //         color: Color(
+          //             0xFF8b8a84), // Cinza (500) - Cor dos labels não selecionados
+          //       ),
+          //     ),
+          //   ),
+          //   floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          //     backgroundColor: Color(0xFFcee4d2), // Verde 1 (200)
+          //     foregroundColor: Color(0xFF2e4d34), // Verde 1 (800)
+          //   ),
+          //   elevatedButtonTheme: ElevatedButtonThemeData(
+          //     style: ButtonStyle(
+          //       backgroundColor: WidgetStatePropertyAll(
+          //         Color(0xFF3a6642), // Verde 1 (700)
+          //       ),
+          //       foregroundColor: const WidgetStatePropertyAll(
+          //         Color(0xFFf6f6f6), // Cinza (50)
+          //       ),
+          //       overlayColor: WidgetStatePropertyAll(
+          //         Color(0xFFa6cfad), // Verde 1 (300)
+          //       ),
+          //     ),
+          //   ),
+          //   outlinedButtonTheme: OutlinedButtonThemeData(
+          //     style: ButtonStyle(
+          //       foregroundColor: const WidgetStatePropertyAll(
+          //         Color(0xFF3a6642), // Verde 1 (700)
+          //       ),
+          //       overlayColor: WidgetStatePropertyAll(
+          //         Color(0xFFa6cfad).withValues(
+          //             alpha: 0.2), // Verde 1 (300) com 20% de opacidade
+          //       ),
+          //     ),
+          //   ),
+          //   inputDecorationTheme: InputDecorationTheme(
+          //     labelStyle: GoogleFonts.inter(
+          //       fontSize: 12.sp,
+          //       color: const Color(0xFF8b8a84),
+          //     ),
+          //     disabledBorder: OutlineInputBorder(
+          //       borderSide: const BorderSide(
+          //         color: Color(0xFF8b8a84),
+          //       ),
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(16.r),
+          //       ),
+          //     ),
+          //     enabledBorder: OutlineInputBorder(
+          //       borderSide: const BorderSide(
+          //         color: Color(0xFF3A6642),
+          //       ),
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(16.r),
+          //       ),
+          //     ),
+          //     focusedBorder: OutlineInputBorder(
+          //       borderSide: const BorderSide(
+          //         color: Color(0xFF3A6642),
+          //       ),
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(16.r),
+          //       ),
+          //     ),
+          //     errorBorder: OutlineInputBorder(
+          //       borderSide: const BorderSide(
+          //         color: Color(0xFFbc6262),
+          //       ),
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(16.r),
+          //       ),
+          //     ),
+          //     focusedErrorBorder: OutlineInputBorder(
+          //       borderSide: const BorderSide(
+          //         color: Color(0xFFbc6262),
+          //       ),
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(16.r),
+          //       ),
+          //     ),
+          //   ),
+
+          //   // colorScheme: ColorScheme.fromSeed(
+          //   //   seedColor: const Color(0xff82bd69),
+          //   //   primary: const Color(0xff82bd69),
+          //   //   secondary: const Color(0xff4c8435),
+          //   //   surface: Colors.white,
+          //   // ),
+          // ),
           theme: ThemeData(
             useMaterial3: true,
-            fontFamily: GoogleFonts.inter().fontFamily,
-
-            // colorScheme: ColorScheme.fromSeed(
-            //   seedColor: const Color(0xff82bd69),
-            //   primary: const Color(0xff82bd69),
-            //   secondary: const Color(0xff4c8435),
-            //   surface: Colors.white,
-            // ),
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+            colorScheme: ColorScheme(
+              brightness: Brightness.light,
+              primary: Color(
+                  0xFF3a6642), // Verde 1 (700) - Cor primária (usada em elevatedButton)
+              onPrimary: Color(
+                  0xFFf6f6f6), // Cinza (50) - Cor do texto sobre a cor primária (usada em elevatedButton)
+              secondary:
+                  Color(0xFF88bc64), // Verde Claro (400) - Cor secundária
+              onSecondary: Color(
+                  0xFF2e4d34), // Verde 1 (800) - Cor do texto sobre a cor secundária
+              error: Color(
+                  0xFFbc6262), // Cor de erro (usada em PasswordValidator e TextFormField)
+              onError:
+                  Colors.white, // Verde 2 (700) - Cor do texto sobre o fundo
+              surface: Color(
+                  0xFFf6f6f6), // Cinza (50) - Cor de superfície (cards, etc.)
+              onSurface: Color(
+                  0xFF37623A), // Verde 2 (700) - Cor do texto sobre a superfície (usada em TextFormField)
+              outline: Color(
+                  0xFF3A6642), // Verde 1 (700) - Usado para bordas (usada em TextFormField)
+            ),
+            navigationBarTheme: const NavigationBarThemeData(
+              backgroundColor: Color(0xFFf6f6f6), // Cinza (50)
+              indicatorColor: Color(0xFFcee4d2), // Verde 1 (200)
+              iconTheme: WidgetStatePropertyAll(
+                IconThemeData(
+                  color: Color(
+                      0xFF8b8a84), // Cinza (500) - Cor dos ícones não selecionados
+                ),
+              ),
+              labelTextStyle: WidgetStatePropertyAll(
+                TextStyle(
+                  color: Color(
+                      0xFF8b8a84), // Cinza (500) - Cor dos labels não selecionados
+                ),
+              ),
+            ),
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+              backgroundColor: Color(0xFFcee4d2), // Verde 1 (200)
+              foregroundColor: Color(0xFF2e4d34), // Verde 1 (800)
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  Color(0xFF3a6642), // Verde 1 (700)
+                ),
+                foregroundColor: const WidgetStatePropertyAll(
+                  Color(0xFFf6f6f6), // Cinza (50)
+                ),
+                overlayColor: WidgetStatePropertyAll(
+                  Color(0xFFa6cfad).withValues(
+                      alpha: 0.2), // Verde 1 (300) com 20% de opacidade
+                ),
+              ),
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: ButtonStyle(
+                foregroundColor: const WidgetStatePropertyAll(
+                  Color(0xFF3a6642), // Verde 1 (700)
+                ),
+                overlayColor: WidgetStatePropertyAll(
+                  Color(0xFFa6cfad).withValues(
+                      alpha: 0.2), // Verde 1 (300) com 20% de opacidade
+                ),
+              ),
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              labelStyle: GoogleFonts.inter(
+                fontSize: 12.sp,
+                color: const Color(0xFF8b8a84), // Cinza (500)
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFF8b8a84), // Cinza (500)
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.r),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFF3A6642), // Verde 1 (700)
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.r),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFF3A6642), // Verde 1 (700)
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.r),
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFFbc6262), // Vermelho para erro
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.r),
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFFbc6262), // Vermelho para erro
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16.r),
+                ),
+              ),
+            ),
           ),
           initialRoute: "/",
           onGenerateRoute: RouteGenerator.generateRoute,

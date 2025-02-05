@@ -62,16 +62,19 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       controller: widget.textFormFieldController,
       maxLines: widget.maxLines,
       keyboardType: widget.textInputType,
-      cursorColor: const Color(0xFF3A6642),
-      validator: widget.callback,
+      cursorColor: Theme.of(context)
+          .colorScheme
+          .primary, // Usando a cor primária do tema      validator: widget.callback,
       obscureText: widget.isObscure,
       textInputAction: widget.textInputAction,
       onEditingComplete: widget.onEditComplete,
       maxLength: widget.maxLength,
       maxLengthEnforcement: widget.maxLengthEnforced,
-      style: GoogleFonts.inter(
+      style: GoogleFonts.montserrat(
         fontSize: 17.sp,
-        color: const Color(0xFF37623A),
+        color: Theme.of(context)
+            .colorScheme
+            .onSurface, // Usando a cor do texto sobre a superfície
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
@@ -87,50 +90,13 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
         //       )
         //     : null,
         labelText: widget.label,
-        labelStyle: GoogleFonts.inter(
-          fontSize: 12.sp,
-          color: const Color(0xFF8b8a84),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFF8b8a84),
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(16.r),
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFF3A6642),
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(16.r),
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFF3A6642),
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(16.r),
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFFbc6262),
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(16.r),
-          ),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-            color: Color(0xFFbc6262),
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(16.r),
-          ),
-        ),
+        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+        disabledBorder: Theme.of(context).inputDecorationTheme.disabledBorder,
+        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+        errorBorder: Theme.of(context).inputDecorationTheme.errorBorder,
+        focusedErrorBorder:
+            Theme.of(context).inputDecorationTheme.focusedErrorBorder,
       ),
     );
   }

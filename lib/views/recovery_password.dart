@@ -41,7 +41,7 @@ class _RecoveryPasswordState extends State<RecoveryPassword> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFFDCDCDA),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -52,149 +52,94 @@ class _RecoveryPasswordState extends State<RecoveryPassword> {
             child: IntrinsicHeight(
               child: Column(
                 children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        width: 200.w,
-                        child: Center(
-                          child: Text.rich(
-                            TextSpan(
-                              style: GoogleFonts.inter(
-                                fontSize: 22.0.sp,
-                                color: const Color(0xFF262624),
-                                height: 1.45.h,
-                              ),
-                              children: const [
-                                TextSpan(
-                                  text: 'Recuperação de',
-                                ),
-                                TextSpan(
-                                  text: ' ',
-                                ),
-                                // TextSpan(
-                                //   text: 'realize o',
-                                // ),
-                                // TextSpan(
-                                //   text: " ",
-                                // ),
-                                TextSpan(
-                                  text: 'senha!',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                                // TextSpan(
-                                //   text: " ",
-                                //   style: TextStyle(
-                                //     fontWeight: FontWeight.w600,
-                                //   ),
-                                // ),
-                                // TextSpan(
-                                //   text: "para continuar!",
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: 120.h,
                   ),
-                  Expanded(
-                    flex: 6,
-                    child: ImageAsset(
-                      asset: 'assets/reportCityLogo.png',
-                      width_: screenSize.height / 5,
-                      height_: screenSize.height / 5,
-                      imageAlignment: Alignment.center,
-                      hasAntiAlias: true,
-                      imageFilterQuality: FilterQuality.high,
-                    ),
+                  ImageAsset(
+                    asset: 'assets/reportCityLogoConverted.png',
+                    width_: screenSize.height / 5,
+                    height_: screenSize.height / 5,
+                    imageAlignment: Alignment.center,
+                    hasAntiAlias: true,
+                    imageFilterQuality: FilterQuality.high,
                   ),
-                  Expanded(
-                    flex: 4,
-                    child: Form(
-                      key: _passwordRecoveryFormKey,
-                      child: Flex(
-                        direction: Axis.vertical,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
+                  SizedBox(
+                    height: 160.h,
+                  ),
+                  Form(
+                    key: _passwordRecoveryFormKey,
+                    child: Flex(
+                      direction: Axis.vertical,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8.w, right: 8.w),
                             child: Text(
                               "Por favor, insira seu e-mail para recuperar a sua senha.",
                               style: TextStyle(
                                 fontSize: 14.sp,
+                                color: Colors.black,
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
 
-                            textFormFieldController: _emailController,
-                            isObscure: false,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.done,
-                            formKey: _passwordRecoveryFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira seu e-mail!";
-                              }
-
-                              if (!EmailValidator.validate(value)) {
-                                return "E-mail incorreto!";
-                              }
-                              return null;
-                            },
-                            label: "E-mail",
-                            maxLines: 1,
-                            textInputType: TextInputType.emailAddress,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(255)
-                            ],
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Flex(
-                      direction: Axis.vertical,
-                      children: [
-                        ElevatedButtonWidget(
-                          callback: () {
-                            if (_passwordRecoveryFormKey.currentState!
-                                .validate()) {
-                              Navigator.popAndPushNamed(
-                                context,
-                                "/mfa_recovery_password",
-                                arguments: _emailController.text,
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Insira os seus dados corretamente!',
-                                  ),
-                                ),
-                              );
+                          textFormFieldController: _emailController,
+                          isObscure: false,
+                          //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                          textInputAction: TextInputAction.done,
+                          formKey: _passwordRecoveryFormKey,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira seu e-mail!";
                             }
+
+                            if (!EmailValidator.validate(value)) {
+                              return "E-mail incorreto!";
+                            }
+                            return null;
                           },
-                          width_: screenSize.width,
-                          height_: 50.h,
-                          label: "Prosseguir com a recuperação",
+                          label: "E-mail",
+                          maxLines: 1,
+                          textInputType: TextInputType.emailAddress,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(255)
+                          ],
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
                         ),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 275.h,
+                  ),
+                  ElevatedButtonWidget(
+                    callback: () {
+                      if (_passwordRecoveryFormKey.currentState!.validate()) {
+                        Navigator.popAndPushNamed(
+                          context,
+                          "/mfa_recovery_password",
+                          arguments: _emailController.text,
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Insira os seus dados corretamente!',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    width_: screenSize.width,
+                    height_: 50.h,
+                    label: "Prosseguir com a recuperação",
                   ),
                   Padding(
                     padding: EdgeInsets.only(

@@ -25,18 +25,23 @@ class ElevatedButtonWidget extends StatelessWidget {
         fixedSize: WidgetStatePropertyAll(
           Size(width_, height_),
         ),
-        backgroundColor: const WidgetStatePropertyAll(
-          Color(0xFF3a6642),
+        backgroundColor: WidgetStatePropertyAll(
+          Theme.of(context)
+              .colorScheme
+              .primary, // Usando a cor primária do tema
         ),
         overlayColor: WidgetStatePropertyAll(
-          const Color(0xFFa6cfad).withOpacity(0.2),
+          Theme.of(context)
+              .colorScheme
+              .primary
+              .withOpacity(0.2), // Usando a cor primária com opacidade
         ),
       ),
       child: Text(
         label,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.montserrat(
           fontSize: 16.sp,
-          color: const Color(0xFFf6f6f6),
+          color: Theme.of(context).colorScheme.onPrimary,
           fontWeight: FontWeight.w600,
           height: 1.5.h,
         ),

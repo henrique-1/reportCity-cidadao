@@ -30,7 +30,7 @@ class _NewPasswordState extends State<NewPassword> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFFDCDCDA),
+      backgroundColor: const Color(0xFFEFEFEF),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -41,166 +41,117 @@ class _NewPasswordState extends State<NewPassword> {
             child: IntrinsicHeight(
               child: Column(
                 children: <Widget>[
-                  Expanded(
-                    flex: 3,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        width: 200.w,
-                        child: Center(
-                          child: Text.rich(
-                            TextSpan(
-                              style: GoogleFonts.inter(
-                                fontSize: 22.0.sp,
-                                color: const Color(0xFF262624),
-                                height: 1.45.h,
-                              ),
-                              children: const [
-                                TextSpan(
-                                  text: 'Insira',
-                                ),
-                                TextSpan(
-                                  text: ' ',
-                                ),
-                                TextSpan(
-                                  text: 'sua nova',
-                                ),
-                                TextSpan(
-                                  text: ' ',
-                                ),
-                                TextSpan(
-                                  text: 'senha!',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: 120.h,
                   ),
-                  Expanded(
-                    flex: 4,
-                    child: ImageAsset(
-                      asset: 'assets/reportCityLogo.png',
-                      width_: screenSize.height / 5,
-                      height_: screenSize.height / 5,
-                      imageAlignment: Alignment.center,
-                      hasAntiAlias: true,
-                      imageFilterQuality: FilterQuality.high,
-                    ),
+                  ImageAsset(
+                    asset: 'assets/reportCityLogoConverted.png',
+                    width_: screenSize.height / 5,
+                    height_: screenSize.height / 5,
+                    imageAlignment: Alignment.center,
+                    hasAntiAlias: true,
+                    imageFilterQuality: FilterQuality.high,
                   ),
-                  Expanded(
-                    flex: 5,
-                    child: Form(
-                      key: _newPasswordFormKey,
-                      child: Flex(
-                        direction: Axis.vertical,
-                        children: [
-                          TextFormFieldWidget(
-                            isEnabled: true,
-
-                            textFormFieldController: _passwordController,
-                            isObscure: true,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.next,
-                            formKey: _newPasswordFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira sua senha!";
-                              }
-
-                              return null;
-                            },
-                            label: "Senha",
-                            maxLines: 1,
-                            textInputType: TextInputType.visiblePassword,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(60)
-                            ],
-                            //maxLength: 60,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          PasswordValidator(
-                            validatorStateKey: _passwordValidatorKey,
-                            width: screenSize.width,
-                            height: 150.h,
-                            onSuccessCallback: () {},
-                            onFailureCallback: (value) {},
-                            passwordController: _passwordController,
-                            minLength: 8,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                          TextFormFieldWidget(
-                            isEnabled: true,
-
-                            textFormFieldController:
-                                _passwordConfirmationController,
-                            isObscure: true,
-                            //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
-                            textInputAction: TextInputAction.done,
-                            formKey: _newPasswordFormKey,
-                            callback: (value) {
-                              if (value!.isEmpty) {
-                                return "Insira a confirmação da sua senha!";
-                              }
-
-                              if (_passwordController.text !=
-                                  _passwordConfirmationController.text) {
-                                return "As senhas devem ser idênticas";
-                              }
-
-                              return null;
-                            },
-                            label: "Confirmação de senha",
-                            maxLines: 1,
-                            textInputType: TextInputType.visiblePassword,
-                            textInputFormatter: [
-                              LengthLimitingTextInputFormatter(60)
-                            ],
-                            // maxLength: 60,
-                            maxLengthEnforced: MaxLengthEnforcement.enforced,
-                          ),
-                          SizedBox(
-                            height: 8.h,
-                          ),
-                        ],
-                      ),
-                    ),
+                  SizedBox(
+                    height: 160.h,
                   ),
-                  Expanded(
-                    flex: 1,
+                  Form(
+                    key: _newPasswordFormKey,
                     child: Flex(
                       direction: Axis.vertical,
                       children: [
-                        ElevatedButtonWidget(
-                          callback: () {
-                            if (_newPasswordFormKey.currentState!.validate()) {
-                              Navigator.popAndPushNamed(context, "/");
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Insira sua senha!',
-                                  ),
-                                ),
-                              );
+                        TextFormFieldWidget(
+                          isEnabled: true,
+
+                          textFormFieldController: _passwordController,
+                          isObscure: true,
+                          //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                          textInputAction: TextInputAction.next,
+                          formKey: _newPasswordFormKey,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira sua senha!";
                             }
+
+                            return null;
                           },
-                          width_: screenSize.width,
-                          height_: 50.h,
-                          label: "Recuperar senha",
+                          label: "Senha",
+                          maxLines: 1,
+                          textInputType: TextInputType.visiblePassword,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(60)
+                          ],
+                          //maxLength: 60,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        PasswordValidator(
+                          validatorStateKey: _passwordValidatorKey,
+                          width: screenSize.width,
+                          height: 150.h,
+                          onSuccessCallback: () {},
+                          onFailureCallback: (value) {},
+                          passwordController: _passwordController,
+                          minLength: 8,
+                        ),
+                        SizedBox(
+                          height: 8.h,
+                        ),
+                        TextFormFieldWidget(
+                          isEnabled: true,
+
+                          textFormFieldController:
+                              _passwordConfirmationController,
+                          isObscure: true,
+                          //scrollPaddingHeight: MediaQuery.of(context).viewInsets.bottom + 20,
+                          textInputAction: TextInputAction.done,
+                          formKey: _newPasswordFormKey,
+                          callback: (value) {
+                            if (value!.isEmpty) {
+                              return "Insira a confirmação da sua senha!";
+                            }
+
+                            if (_passwordController.text !=
+                                _passwordConfirmationController.text) {
+                              return "As senhas devem ser idênticas";
+                            }
+
+                            return null;
+                          },
+                          label: "Confirmação de senha",
+                          maxLines: 1,
+                          textInputType: TextInputType.visiblePassword,
+                          textInputFormatter: [
+                            LengthLimitingTextInputFormatter(60)
+                          ],
+                          // maxLength: 60,
+                          maxLengthEnforced: MaxLengthEnforcement.enforced,
                         ),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 75.h,
+                  ),
+                  ElevatedButtonWidget(
+                    callback: () {
+                      if (_newPasswordFormKey.currentState!.validate()) {
+                        Navigator.popAndPushNamed(context, "/");
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Insira sua senha!',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    width_: screenSize.width,
+                    height_: 50.h,
+                    label: "Recuperar senha",
                   ),
                   Padding(
                     padding: EdgeInsets.only(
