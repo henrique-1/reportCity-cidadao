@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// TODO: Ideally, these colors should come from a centralized Theme file (e.g., main.dart or a dedicated theme.dart)
+// For now, defining them here for localized consistency.
+const Color _appBackgroundColor = Color(0xFFEFEFEF);
+const Color _navigationBarColor = Color(0xFFF6F6F6);
+const Color _navigationIndicatorColor = Color(0xFFCEE4D2); // Light green, might be accent or primary variant
+const Color _primaryTextColor = Color(0xFF2E4D34); // Dark green, might be primary or onAccent/onPrimaryVariant
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -19,9 +26,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFFEFEFEF),
+      backgroundColor: _appBackgroundColor,
       bottomNavigationBar: NavigationBar(
-        backgroundColor: const Color(0xFFf6f6f6),
+        backgroundColor: _navigationBarColor,
         onDestinationSelected: (int index) {
           setState(
             () {
@@ -30,21 +37,21 @@ class _HomeState extends State<Home> {
           );
         },
         selectedIndex: currentPageIndex,
-        indicatorColor: const Color(0xFFcee4d2),
+        indicatorColor: _navigationIndicatorColor,
         destinations: const <Widget>[
           NavigationDestination(
             selectedIcon:
-                Icon(Icons.notifications_sharp, color: Color(0xFF2e4d34)),
+                Icon(Icons.notifications_sharp, color: _primaryTextColor),
             icon: Icon(Icons.notifications_outlined),
             label: 'Notificações',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.home, color: Color(0xFF2e4d34)),
+            selectedIcon: Icon(Icons.home, color: _primaryTextColor),
             icon: Icon(Icons.home_outlined),
             label: 'Feed',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.person, color: Color(0xFF2e4d34)),
+            selectedIcon: Icon(Icons.person, color: _primaryTextColor),
             icon: Icon(Icons.person_outline),
             label: 'Perfil',
           ),
@@ -56,22 +63,22 @@ class _HomeState extends State<Home> {
         HomeProfile(),
       ][currentPageIndex],
       floatingActionButton: Visibility(
-        visible: currentPageIndex == 0 || currentPageIndex == 2 ? false : true,
+        visible: currentPageIndex == 1, // FAB is visible only on the 'Feed' screen (index 1)
         child: FloatingActionButton.extended(
           onPressed: () {
             Navigator.pushNamed(context, "/report");
           },
-          backgroundColor: const Color(0xFFcee4d2),
+          backgroundColor: _navigationIndicatorColor, // Or another appropriate theme color
           label: Text(
             "Denunciar",
             style: GoogleFonts.inter(
                 fontSize: 16.sp,
-                color: const Color(0xFF2e4d34),
+                color: _primaryTextColor,
                 fontWeight: FontWeight.w600),
           ),
           icon: const Icon(
             Icons.warning,
-            color: Color(0xFF2e4d34),
+            color: _primaryTextColor,
           ),
         ),
       ),

@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:cidadao/components/password_validator.dart';
 import 'package:cidadao/functions/image_to_base64.dart';
 import 'package:cidadao/functions/save_cache.dart';
-import 'package:dio/io.dart';
+// import 'package:dio/io.dart'; // Unused import
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
+import 'package:cidadao/config/app_config.dart'; // Import AppConfig
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
@@ -28,6 +29,7 @@ class _LogonState extends State<Logon> {
   final _logonFormKey = GlobalKey<FormState>();
   final GlobalKey<FlutterPwValidatorState> _passwordValidatorKey =
       GlobalKey<FlutterPwValidatorState>();
+  bool _isLoading = false; // Loading state for registration button
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _cpfController = TextEditingController();
@@ -65,37 +67,70 @@ class _LogonState extends State<Logon> {
 
   Future<void> getZipCodeInfo(String normalizedZipCode) async {
     try {
+      // Ensure AppConfig.viaCepApiUrl is defined, e.g., static const String viaCepApiUrl = 'https://viacep.com.br/ws';
       Response<dynamic> response = await Dio().get(
-        "https://viacep.com.br/ws/$normalizedZipCode/json/",
+        "${AppConfig.viaCepApiUrl}/$normalizedZipCode/json/",
         options: Options(
           responseType: ResponseType.json,
         ),
       );
 
-      if (response.data['logradouro'] == null) {
-        throw DioException.badResponse(
-          statusCode: response.statusCode!.toInt(),
-          requestOptions: response.requestOptions,
-          response: response,
-        );
-      } else {
+      // ViaCEP returns 200 even for non-existent CEPs, with an "erro" flag
+      if (response.data is Map && response.data['erro'] == true) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('CEP não encontrado.')),
+          );
+        }
+        _clearAddressFields(); // Clear fields if CEP is not found
+        return;
+      }
+
+      if (response.data != null && response.data['logradouro'] != null) {
         _streetController.text = response.data['logradouro'];
         _neighborhoodController.text = response.data['bairro'];
         _cityController.text = response.data['localidade'];
         _stateController.text = response.data['uf'];
-        _logonFormKey.currentState!.validate();
+        // TODO: Reconsider validating the entire form here. It might be better to let individual fields handle their validation state.
+        if (mounted) {
+           _logonFormKey.currentState?.validate();
+        }
+      } else {
+         // This case might be redundant if 'erro:true' check is robust
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Resposta inválida do serviço de CEP.')),
+          );
+        }
+        _clearAddressFields();
       }
     } on DioException catch (e) {
-      if (e.response != null) {
-        print(e.response?.data);
-        print(e.response?.headers);
-        print(e.response?.requestOptions);
-      } else {
-        // Something happened in setting up or sending the request that triggered an Error
-        print(e.requestOptions);
-        print(e.message);
+      debugPrint("DioException in getZipCodeInfo: ${e.message}");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao buscar CEP: ${e.message}')),
+        );
       }
+      _clearAddressFields();
+    } catch (err) {
+      debugPrint("Unexpected error in getZipCodeInfo: $err");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ocorreu um erro inesperado ao buscar informações do CEP.')),
+        );
+      }
+      _clearAddressFields();
     }
+  }
+
+  void _clearAddressFields() {
+    _streetController.clear();
+    _neighborhoodController.clear();
+    _cityController.clear();
+    _stateController.clear();
+     if (mounted) {
+        _logonFormKey.currentState?.validate(); // Re-validate relevant fields after clearing
+     }
   }
 
   /// Cadastro:
@@ -652,38 +687,102 @@ class _LogonState extends State<Logon> {
                   ),
                   ElevatedButtonWidget(
                     callback: () async {
-                      try {
-                        final String imageBase64 =
-                            await convertToBase64(_reportImage!);
-
-                        if (_logonFormKey.currentState!.validate()) {
-                          Response<dynamic> responseLogon = await Dio().post(
-                            "http://reportcity.ddns.net:3333/cidadao",
-                            data: {
-                              'fullname': _fullNameController.text,
-                              'cpf': _cpfController.text,
-                              'cellphone': _phoneController.text,
-                              'email': _emailController.text,
-                              'cep': _zipController.text,
-                              'street': _streetController.text,
-                              'houseNumber': _houseNumberController.text,
-                              'houseComplement': _complementController.text,
-                              'district': _neighborhoodController.text,
-                              'city': _cityController.text,
-                              'state': _stateController.text,
-                              'password': _passwordController.text,
-                              'confirmPassword':
-                                  _passwordConfirmationController.text,
-                              'imageBase64': imageBase64,
-                            },
-                            options: Options(
-                              responseType: ResponseType.json,
-                            ),
+                      if (!_logonFormKey.currentState!.validate()) {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Por favor, corrija os erros no formulário.')),
                           );
+                        }
+                        return;
+                      }
 
-                          if (responseLogon.statusCode == 200) {
+                      if (_reportImage == null) {
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Por favor, selecione uma imagem de perfil.')),
+                          );
+                        }
+                        return;
+                      }
+                       // Validate password using FlutterPwValidator's state
+                      if (_passwordValidatorKey.currentState != null &&
+                          !_passwordValidatorKey.currentState!.validate()) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Senha inválida. Verifique os critérios.')),
+                            );
+                          }
+                          return;
+                      }
+
+
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      String? imageBase64;
+                      try {
+                        imageBase64 = await convertToBase64(_reportImage!);
+                      } catch (e) {
+                        debugPrint("Error converting image to Base64: $e");
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Erro ao processar imagem. Tente outra.')),
+                          );
+                        }
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        return;
+                      }
+
+                      try {
+                        // Registration Call
+                        // Ensure AppConfig.apiUrl uses HTTPS if that's the standard
+                        Response<dynamic> responseLogon = await Dio().post(
+                          "${AppConfig.apiUrl}/cidadao", // Use AppConfig
+                          data: {
+                            'fullname': _fullNameController.text,
+                            'cpf': UtilBrasilFields.removeCaracteres(_cpfController.text),
+                            'cellphone': UtilBrasilFields.removeCaracteres(_phoneController.text),
+                            'email': _emailController.text,
+                            'cep': UtilBrasilFields.removeCaracteres(_zipController.text),
+                            'street': _streetController.text,
+                            'houseNumber': _houseNumberController.text,
+                            'houseComplement': _complementController.text,
+                            'district': _neighborhoodController.text,
+                            'city': _cityController.text,
+                            'state': _stateController.text,
+                            'password': _passwordController.text,
+                            'confirmPassword': _passwordConfirmationController.text,
+                            'imageBase64': imageBase64,
+                          },
+                          options: Options(
+                            responseType: ResponseType.json,
+                          ),
+                        );
+
+                        if (responseLogon.statusCode == 200 || responseLogon.statusCode == 201) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Cadastro realizado com sucesso! Efetuando login...'),
+                                  backgroundColor: Colors.green),
+                            );
+                          }
+
+                          // Login Call
+                          try {
                             Response<dynamic> responseLogin = await Dio().post(
-                              "https://reportcity.ddns.net:3333/cidadao/login",
+                              "${AppConfig.apiUrl}/cidadao/login", // Use AppConfig
                               data: {
                                 'email': _emailController.text,
                                 'password': _passwordController.text
@@ -693,28 +792,84 @@ class _LogonState extends State<Logon> {
                               ),
                             );
 
-                            saveData(
-                                'public_id', responseLogin.data["public_id"]);
-                            saveData('token', responseLogin.data["token"]);
+                            if (responseLogin.statusCode == 200 || responseLogin.statusCode == 201) {
+                              // TODO: Implement secure and asynchronous storage for token and public_id
+                              saveData('public_id', responseLogin.data["public_id"]);
+                              saveData('token', responseLogin.data["token"]);
 
-                            Navigator.popAndPushNamed(context, "/");
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Login efetuado com sucesso!'),
+                                      backgroundColor: Colors.green),
+                                );
+                                Navigator.popAndPushNamed(context, "/home"); // Navigate to home
+                              }
+                            } else {
+                               if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Erro no login após cadastro: ${responseLogin.statusMessage}')),
+                                );
+                              }
+                            }
+                          } on DioException catch (e) {
+                            debugPrint("DioException during login after registration: ${e.message}");
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text('Erro no login após cadastro: ${e.response?.data['message'] ?? e.message}')),
+                              );
+                            }
+                          } catch (e) {
+                            debugPrint("Error during login after registration: $e");
+                             if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Erro inesperado no login: ${e.toString()}')),
+                              );
+                            }
                           }
                         } else {
+                           if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Erro no cadastro: ${responseLogon.statusMessage}')),
+                            );
+                          }
+                        }
+                      } on DioException catch (e) {
+                        debugPrint("DioException during registration: ${e.message}");
+                        if (mounted) {
+                           String errorMessage = e.response?.data['message'] ?? e.message ?? "Erro desconhecido no cadastro.";
+                           if (e.response?.data['errors'] != null && e.response?.data['errors'] is Map) {
+                             final errors = e.response?.data['errors'] as Map;
+                             if (errors.isNotEmpty) {
+                               final firstError = errors.entries.first;
+                               errorMessage = "${firstError.key}: ${firstError.value[0]}";
+                             }
+                           }
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Insira os seus dados corretamente!',
-                              ),
-                            ),
+                            SnackBar(content: Text(errorMessage)),
                           );
                         }
                       } catch (err) {
-                        print(err);
+                        debugPrint("Unexpected error during registration: $err");
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Ocorreu um erro inesperado: ${err.toString()}')),
+                          );
+                        }
+                      } finally {
+                        if (mounted) {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
                       }
                     },
                     width_: screenSize.width,
                     height_: 50.h,
-                    label: "Cadastrar",
+                    label: _isLoading ? "Cadastrando..." : "Cadastrar",
                   ),
                   SizedBox(
                     height: 8.h,

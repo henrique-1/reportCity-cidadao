@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:cidadao/components/elevatedButton.dart';
 import 'package:cidadao/components/imageAsset.dart';
 import 'package:cidadao/components/outlinedButton.dart';
-import 'package:cidadao/components/textButton.dart';
 import 'package:cidadao/components/textFormField.dart';
-import 'package:cidadao/functions/save_cache.dart';
-import 'package:dio/io.dart';
+import 'package:cidadao/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -53,53 +48,6 @@ class _LoginState extends State<Login> {
             child: IntrinsicHeight(
               child: Column(
                 children: <Widget>[
-                  // Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: SizedBox(
-                  //     width: 300.w,
-                  //     child: Center(
-                  //       child: Text.rich(
-                  //         TextSpan(
-                  //           style: GoogleFonts.inter(
-                  //             fontSize: 22.0.sp,
-                  //             color: const Color(0xFF262624),
-                  //             height: 1.45.h,
-                  //           ),
-                  //           children: const [
-                  //             TextSpan(
-                  //               text: 'Seja bem-vindo',
-                  //             ),
-                  //             TextSpan(
-                  //               text: ', ',
-                  //             ),
-                  //             TextSpan(
-                  //               text: 'realize o',
-                  //             ),
-                  //             TextSpan(
-                  //               text: " ",
-                  //             ),
-                  //             TextSpan(
-                  //               text: 'Login',
-                  //               style: TextStyle(
-                  //                 fontWeight: FontWeight.w600,
-                  //                 decoration: TextDecoration.underline,
-                  //               ),
-                  //             ),
-                  //             TextSpan(
-                  //               text: " ",
-                  //               style: TextStyle(
-                  //                 fontWeight: FontWeight.w600,
-                  //               ),
-                  //             ),
-                  //             TextSpan(
-                  //               text: "para continuar!",
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 120.h,
                   ),
@@ -219,7 +167,7 @@ class _LoginState extends State<Login> {
                       try {
                         if (_loginFormKey.currentState!.validate()) {
                           Response<dynamic> response = await Dio().post(
-                            "https://reportcity.ddns.net:3333/cidadao/login",
+                            "${AppConfig.apiUrl}/cidadao/login",
                             data: {
                               'email': _emailController.text,
                               'password': _passwordController.text
@@ -230,21 +178,69 @@ class _LoginState extends State<Login> {
                           );
 
                           if (response.statusCode == 200) {
+                            // TODO: Implement secure storage for token and public_id.
+                            // TODO: Handle potential errors from saveData if it can throw.
                             saveData('public_id', response.data["public_id"]);
                             saveData('token', response.data["token"]);
-                            Navigator.popAndPushNamed(context, "/home");
+                            if (mounted) {
+                              Navigator.popAndPushNamed(context, "/home");
+                            }
+                          } else {
+                            // This case might not be reached if Dio automatically throws exceptions for non-200 status codes.
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Falha no login: ${response.statusMessage} (${response.statusCode})'),
+                                ),
+                              );
+                            }
                           }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Insira os seus dados corretamente!',
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Por favor, preencha todos os campos corretamente.',
+                                ),
                               ),
+                            );
+                          }
+                        }
+                      } on DioException catch (e) {
+                        debugPrint("DioException during login: ${e.message}");
+                        debugPrint("Response data: ${e.response?.data}");
+                        if (mounted) {
+                          String errorMessage = "Erro de conexão.";
+                          if (e.response?.statusCode == 401) {
+                            errorMessage = "E-mail ou senha incorretos.";
+                          } else if (e.response?.data is Map && e.response?.data['message'] != null) {
+                            errorMessage = "Erro: ${e.response!.data['message']}";
+                          } else if (e.message != null && e.message!.isNotEmpty) {
+                            errorMessage = e.message!;
+                          } else {
+                            errorMessage = "Não foi possível conectar ao servidor. Verifique sua conexão com a internet e tente novamente.";
+                          }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(errorMessage),
+                              duration: const Duration(seconds: 3),
                             ),
                           );
                         }
-                      } catch (err) {
-                        print(err);
+                      } catch (err, stacktrace) {
+                        debugPrint("Unexpected error during login: $err");
+                        debugPrint(stacktrace.toString());
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Ocorreu um erro inesperado. Por favor, tente novamente.',
+                              ),
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                        }
                       }
                     },
                     width_: screenSize.width,
@@ -299,82 +295,6 @@ class _LoginState extends State<Login> {
                     height_: 50.h,
                     label: "Criar uma conta",
                   ),
-
-                  // Expanded(
-                  //   flex: 2,
-                  //   child: Flex(
-                  //     direction: Axis.vertical,
-                  //     children: [
-                  //       ElevatedButtonWidget(
-                  //         callback: () {
-                  //           if (_loginFormKey.currentState!.validate()) {
-                  //             Navigator.popAndPushNamed(context, "/home");
-                  //           } else {
-                  //             ScaffoldMessenger.of(context).showSnackBar(
-                  //               const SnackBar(
-                  //                 content: Text(
-                  //                   'Insira os seus dados corretamente!',
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           }
-                  //         },
-                  //         width_: screenSize.width,
-                  //         height_: 50.h,
-                  //         label: "Logar",
-                  //       ),
-                  //       SizedBox(
-                  //         height: 25.h,
-                  //       ),
-                  //       SizedBox(
-                  //         height: 20.h,
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           crossAxisAlignment: CrossAxisAlignment.center,
-                  //           children: <Widget>[
-                  //             const Expanded(
-                  //               flex: 2,
-                  //               child: Divider(
-                  //                 color: Color(0xFF9e9d99),
-                  //               ),
-                  //             ),
-                  //             Expanded(
-                  //               flex: 3,
-                  //               child: Text(
-                  //                 "Não possui uma conta?",
-                  //                 textAlign: TextAlign.center,
-                  //                 style: GoogleFonts.inter(
-                  //                   fontSize: 12.sp,
-                  //                   color:
-                  //                       const Color.fromARGB(255, 77, 71, 50),
-                  //                   fontWeight: FontWeight.w500,
-                  //                   height: 1.67.sp,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             const Expanded(
-                  //               flex: 2,
-                  //               child: Divider(
-                  //                 color: Color(0xFF9e9d99),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       SizedBox(
-                  //         height: 25.h,
-                  //       ),
-                  //       OutlinedButtonWidget(
-                  //         callback: () {
-                  //           Navigator.pushNamed(context, "/logon");
-                  //         },
-                  //         width_: screenSize.width,
-                  //         height_: 50.h,
-                  //         label: "Criar uma conta",
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                   Padding(
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
